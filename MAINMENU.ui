@@ -98,6 +98,27 @@ background-color: rgb(0, 0, 0);</string>
      <string>Exit</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-5</y>
+      <width>1441</width>
+      <height>751</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">image: url(:/newPrefix/F1-logo.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>Heading</zorder>
+   <zorder>playButton</zorder>
+   <zorder>settingsButton</zorder>
+   <zorder>exitButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -111,6 +132,8 @@ background-color: rgb(0, 0, 0);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../Downloads/background image.qrc"/>
+ </resources>
  <connections/>
 </ui>

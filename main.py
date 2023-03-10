@@ -197,13 +197,26 @@ drivers = {
 
 
 class MyWindow(QMainWindow):
+
     def __init__(self):
         super(MyWindow, self).__init__()
         loadUi("MAINMENU.ui", self)
-        # self.exitbutton.clicked.connect(self.exit())
+        self.playButton = self.findChild(QPushButton, "playButton")
+        self.settingsButton = self.findChild(QPushButton, "settingsButton")
+        self.exitButton = self.findChild(QPushButton, "exitButton")
 
-#    def exit(self):
+        self.playButton.clicked.connect(self.team_select_menu)
+        self.settingsButton.clicked.connect(self.settings_menu)
+        self.exitButton.clicked.connect(self.exit_menu)
 
+    def team_select_menu(self):
+        loadUi("TeamSelectMenu.ui", self)
+
+    def settings_menu(self):
+        loadUi("SettingsMenu.ui", self)
+
+    def exit_menu(self):
+        self.close()
 
 
 def window():
