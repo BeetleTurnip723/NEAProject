@@ -8,8 +8,9 @@ My idea for my NEA is to make a formula one set-up simulator where you get rando
 # automake the other drivers set-ups and then give a recommendation to the reader to say what they can do better
 import PyQt5
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSlider, QLabel
 import sys
+
 from PyQt5.uic import loadUi
 import pygame
 import pygame_menu
@@ -196,6 +197,27 @@ drivers = {
 }
 
 
+class TeamSelectWindow(QMainWindow):
+
+    def __init__(self):
+        super(TeamSelectWindow, self).__init__()
+        loadUi("TeamSelectMenu.ui", self)
+
+
+class SettingsWindow(QMainWindow):
+
+    def __init__(self):
+        super(SettingsWindow, self).__init__()
+        loadUi("SettingsMenu.ui", self)
+        self.slider = self.findChild(QSlider, "horizontalSlider")
+        self.label = self.findChild(QLabel, "label")
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.slider.valueChanged.connect(self.slide_it)
+
+    def slide_it(self, value):
+        self.label.setText(str(value))
+
 class MyWindow(QMainWindow):
 
     def __init__(self):
@@ -209,11 +231,15 @@ class MyWindow(QMainWindow):
         self.settingsButton.clicked.connect(self.settings_menu)
         self.exitButton.clicked.connect(self.exit_menu)
 
+        self.team_select_window = TeamSelectWindow()
+        self.settings_win = SettingsWindow()
+        self.show()
+
     def team_select_menu(self):
-        loadUi("TeamSelectMenu.ui", self)
+        self.team_select_window.show()
 
     def settings_menu(self):
-        loadUi("SettingsMenu.ui", self)
+        self.settings_win.show()
 
     def exit_menu(self):
         self.close()
@@ -224,7 +250,7 @@ def window():
     win = MyWindow()
     win.setFixedWidth(SCREENWIDTH)
     win.setFixedHeight(SCREENHEIGHT)
-    win.show()
+    app.exec_()
     sys.exit(app.exec_())
 
 
