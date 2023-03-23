@@ -8,7 +8,7 @@ My idea for my NEA is to make a formula one set-up simulator where you get rando
 # automake the other drivers set-ups and then give a recommendation to the reader to say what they can do better
 import PyQt5
 from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSlider, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSlider, QLabel, QLineEdit
 import sys
 
 from PyQt5.uic import loadUi
@@ -196,12 +196,28 @@ drivers = {
 
 }
 
+class SetUpScreen(QMainWindow):
+
+    def __init__(self):
+        super(SetUpScreen, self).__init__()
+        loadUi("SetUpScreen.ui", self)
 
 class TeamSelectWindow(QMainWindow):
 
     def __init__(self):
         super(TeamSelectWindow, self).__init__()
         loadUi("TeamSelectMenu.ui", self)
+        self.backButton = self.findChild(QPushButton, "backButton")
+        self.rb_label = self.findChild(QLabel, "rb_label")
+        self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
+
+        self.SettingsMenu = SettingsWindow()
+        self.fav_team_lbl.setText(self.SettingsMenu.fav_team_set_lbl.text())
+
+        self.backButton.clicked.connect(self.back_to_main_menu)
+
+    def back_to_main_menu(self):
+        self.close()
 
 
 class SettingsWindow(QMainWindow):
@@ -210,13 +226,50 @@ class SettingsWindow(QMainWindow):
         super(SettingsWindow, self).__init__()
         loadUi("SettingsMenu.ui", self)
         self.slider = self.findChild(QSlider, "horizontalSlider")
-        self.label = self.findChild(QLabel, "label")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.fav_team_set_lbl = self.findChild(QLabel, "fav_team_set_lbl")
+        self.label2 = self.findChild(QLabel, "label_2")
+        self.backbutton = self.findChild(QPushButton, "back_button")
+        # self.TeamSelectMenu = TeamSelectWindow()
+
+        self.fav_team_set_lbl.setAlignment(QtCore.Qt.AlignCenter)
+        self.label2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.slider.valueChanged.connect(self.slide_it)
+        self.backbutton.clicked.connect(self.passing_favourite_Team)
+
+    def passing_favourite_Team(self):
+
+        self.close()
 
     def slide_it(self, value):
-        self.label.setText(str(value))
+
+        if value == 0:
+            value = 'Red Bull'
+        elif value == 1:
+            value = 'Ferrari'
+        elif value == 2:
+            value = 'Mercedes'
+        elif value == 3:
+            value = 'McLaren'
+        elif value == 4:
+            value = 'Alpine'
+        elif value == 5:
+            value = 'Alfa Romeo'
+        elif value == 6:
+            value = 'Aston Martin'
+        elif value == 7:
+            value = 'Alpha Tauri'
+        elif value == 8:
+            value = 'Haas'
+        elif value == 9:
+            value = 'Williams'
+        self.fav_team_set_lbl.setText(str(value))
+        # self.fav_team_set_lbl = str(value)
+        return value
+
+    def back_button_pressed(self):
+        self.close()
+
 
 class MyWindow(QMainWindow):
 
@@ -238,8 +291,10 @@ class MyWindow(QMainWindow):
     def team_select_menu(self):
         self.team_select_window.show()
 
-    def settings_menu(self):
+    def settings_menu(self, value):
+        self.favourite_Team = str(value)
         self.settings_win.show()
+        return self.favourite_Team
 
     def exit_menu(self):
         self.close()
@@ -255,6 +310,7 @@ def window():
 
 
 window()
+
 
 print(drivers['Mercedes']['Lewis Hamilton'])
 

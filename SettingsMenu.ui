@@ -23,16 +23,19 @@
       <height>22</height>
      </rect>
     </property>
+    <property name="maximum">
+     <number>9</number>
+    </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="fav_team_set_lbl">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>630</x>
       <y>170</y>
-      <width>121</width>
+      <width>181</width>
       <height>61</height>
      </rect>
     </property>
@@ -42,7 +45,38 @@
      </font>
     </property>
     <property name="text">
-     <string>0</string>
+     <string>Red Bull</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>100</y>
+      <width>131</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Favourite Team</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="back_button">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>280</y>
+      <width>151</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Back to Main Menu</string>
     </property>
    </widget>
   </widget>
