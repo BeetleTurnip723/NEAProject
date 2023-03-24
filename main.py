@@ -10,6 +10,7 @@ import PyQt5
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSlider, QLabel, QLineEdit
 import sys
+import math
 
 from PyQt5.uic import loadUi
 import pygame
@@ -217,6 +218,8 @@ drivers = {
 driver = ''
 
 
+car = pygame.image.load('img.png')
+
 class SetUpScreen(QMainWindow):
 
     def __init__(self):
@@ -227,6 +230,101 @@ class SetUpScreen(QMainWindow):
         self.confirmbutton.clicked.connect(self.entering_race)
 
     def entering_race(self):
+        self.close()
+
+        class Car(pygame.sprite.Sprite):
+            def __init__(self):
+                super().__init__()
+                self.image = car
+                self.rect = self.image.get_rect()
+                self.rect.x = SCREENWIDTH / 2
+                self.rect.y = SCREENHEIGHT - 100
+                self.speed = 0.0
+                self.angle = 0.0
+
+            def update(self):
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_UP]:
+                    self.speed += 0.1
+                if keys[pygame.K_DOWN]:
+                    self.speed -= 0.1
+                if keys[pygame.K_LEFT]:
+                    self.angle += 5.0
+                if keys[pygame.K_RIGHT]:
+                    self.angle -= 5.0
+                if keys[pygame.K_x]:
+                    self.close()
+
+                self.speed *= 0.99
+                if self.speed > 10.0:
+                    self.speed = 10.0
+                elif self.speed < -5.0:
+                    self.speed = -5.0
+
+                self.rect.x += self.speed * math.sin(math.radians(self.angle))
+                self.rect.y -= self.speed * math.cos(math.radians(self.angle))
+                self.angle %= 360
+
+        class Track:
+
+            def __init__(self, points):
+                self.points = points
+
+
+            def draw(self, screen):
+                pygame.draw.lines(screen, white, True, self.points)
+
+
+        def main():
+
+            pygame.init()
+
+            screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+            pygame.display.set_caption("Race")
+
+            clock = pygame.time.Clock()
+
+            car = Car()
+
+            # Create the track
+            points = [
+                (100, 100),
+                (100, 500),
+                (400, 700),
+                (700, 500),
+                (700, 100)
+            ]
+            track = Track(points)
+
+            # Start the game loop
+            running = True
+            while running:
+                # Handle events
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+
+                # Update the car
+                car.update()
+
+                # Draw the track
+                track.draw(screen)
+
+                # Draw the car
+                screen.blit(car.image, car.rect)
+
+                # Update the screen
+                pygame.display.flip()
+
+                # Limit the frame rate
+                clock.tick(60)
+
+            # Clean up
+            pygame.quit()
+
+        # Run the main function
+        if __name__ == "__main__":
+            main()
         self.close()
 
 
