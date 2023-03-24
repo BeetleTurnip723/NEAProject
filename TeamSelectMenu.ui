@@ -18,13 +18,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>40</y>
       <width>1421</width>
       <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>3</number>
     </property>
     <property name="iconSize">
      <size>
@@ -42,8 +42,8 @@
      <widget class="QLabel" name="rb_label">
       <property name="geometry">
        <rect>
-        <x>420</x>
-        <y>-150</y>
+        <x>410</x>
+        <y>0</y>
         <width>581</width>
         <height>341</height>
        </rect>
@@ -58,17 +58,68 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="max_v_cfm_but">
       <property name="geometry">
        <rect>
-        <x>580</x>
+        <x>320</x>
         <y>460</y>
         <width>251</width>
         <height>131</height>
        </rect>
       </property>
       <property name="text">
-       <string>Choose Team</string>
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ser_p_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="max_v_desc_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>360</y>
+        <width>251</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Max Verstappen is a two-time F1 World Champion, first winning it in 2021. His stats are: OVR Rating; 97, Race-pace; 99, Carefulness; 92, Wet-weather driving; 99 and his cornering style is fast.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="max_v_desc_but_2">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>350</y>
+        <width>251</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Sergio Perez is a five time F1 Race Winner, most recently winning Saudi Arabia 2023. His stats are: OVR Rating; 88, Race-pace; 82, Carefulness; 95, Wet-Weather Driving; 87 and his cornering style is slow.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -76,46 +127,280 @@
      <attribute name="title">
       <string>Mercedes</string>
      </attribute>
+     <widget class="QPushButton" name="geo_r_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="lew_h_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="ferrari_tab">
      <attribute name="title">
       <string>Ferrari</string>
      </attribute>
+     <widget class="QPushButton" name="cha_l_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="car_s_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="mclaren_tab">
      <attribute name="title">
       <string>McLaren</string>
      </attribute>
+     <widget class="QPushButton" name="lan_n_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="osc_p_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="alpine_tab">
      <attribute name="title">
       <string>Alpine</string>
      </attribute>
+     <widget class="QPushButton" name="est_o_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pie_g_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="aston_tab">
      <attribute name="title">
       <string>Aston Martin</string>
      </attribute>
+     <widget class="QPushButton" name="fer_a_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="lan_s_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="romeo_tab">
      <attribute name="title">
       <string>Alfa Romeo</string>
      </attribute>
+     <widget class="QPushButton" name="gua_z_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="val_b_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tauri_tab">
      <attribute name="title">
       <string>Alpha Tauri</string>
      </attribute>
+     <widget class="QPushButton" name="yuk_t_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="nyc_d_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="haas_tab">
      <attribute name="title">
       <string>Haas</string>
      </attribute>
+     <widget class="QPushButton" name="nic_h_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="kev_m_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="williams_tab">
      <attribute name="title">
       <string>Williams</string>
      </attribute>
+     <widget class="QPushButton" name="log_s_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="ale_a_cfm_but">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>460</y>
+        <width>251</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Driver</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QPushButton" name="backButton">

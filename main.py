@@ -24,12 +24,12 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 
-
 # for cornering, F is for fast cornering, M is for medium cornering, S is for slow cornering
 
 drivers = {
     "Mercedes": {
         "Lewis Hamilton": {
+            "Name": "Lewis Hamilton",
             "Rating": 95,
             "Race-pace": 96,
             "Carefulness": 96,
@@ -37,6 +37,7 @@ drivers = {
             "Cornering Style": "F"
         },
         "George Russell": {
+            "Name": "George Russell",
             "Rating:": 89,
             "Race-pace": 93,
             "Carefulness": 84,
@@ -47,6 +48,7 @@ drivers = {
 
     "Red Bull": {
         "Max Verstappen": {
+            "Name": "Max Verstappen",
             "Rating:": 97,
             "Race-pace": 99,
             "Carefulness": 92,
@@ -54,6 +56,7 @@ drivers = {
             "Cornering Style": "F"
         },
         "Sergio Perez": {
+            "Name": "Sergio Perez",
             "Rating:": 88,
             "Race-pace": 82,
             "Carefulness": 95,
@@ -64,6 +67,7 @@ drivers = {
 
     "Ferrari": {
         "Charles Leclerc": {
+            "Name": "Charles Leclerc",
             "Rating:": 91,
             "Race-pace": 94,
             "Carefulness": 90,
@@ -71,6 +75,7 @@ drivers = {
             "Cornering Style": "M"
         },
         "Carlos Sainz": {
+            "Name": "Carlos Sainz",
             "Rating:": 88,
             "Race-pace": 85,
             "Carefulness": 87,
@@ -81,6 +86,7 @@ drivers = {
 
     "McLaren": {
         "Lando Norris": {
+            "Name": "Lando Norris",
             "Rating:": 90,
             "Race-pace": 93,
             "Carefulness": 87,
@@ -88,6 +94,7 @@ drivers = {
             "Cornering Style": "M"
         },
         "Oscar Piastri": {
+            "Name": "Oscar Piastri",
             "Rating:": 82,
             "Race-pace": 86,
             "Carefulness": 78,
@@ -98,6 +105,7 @@ drivers = {
 
     "Aston Martin": {
         "Fernando Alonso": {
+            "Name": "Fernando Alonso",
             "Rating:": 91,
             "Race-pace": 89,
             "Carefulness": 92,
@@ -105,6 +113,7 @@ drivers = {
             "Cornering Style": "S"
         },
         "Lance Stroll": {
+            "Name": "Lance Stroll",
             "Rating:": 85,
             "Race-pace": 85,
             "Carefulness": 83,
@@ -114,6 +123,7 @@ drivers = {
     },
     "Alpine": {
         "Esteban Ocon": {
+            "Name": "Esteban Ocon",
             "Rating:": 86,
             "Race-pace": 88,
             "Carefulness": 83,
@@ -121,6 +131,7 @@ drivers = {
             "Cornering Style": "S"
         },
         "Pierre Gasly": {
+            "Name": "Pierre Gasly",
             "Rating:": 87,
             "Race-pace": 87,
             "Carefulness": 85,
@@ -130,6 +141,7 @@ drivers = {
     },
     "Alpha Tauri": {
         "Nyck de Vries": {
+            "Name": "Nyck de Vries",
             "Rating:": 80,
             "Race-pace": 83,
             "Carefulness": 77,
@@ -137,6 +149,7 @@ drivers = {
             "Cornering Style": "M"
         },
         "Yuki Tsunoda": {
+            "Name": "Yuki Tsunoda",
             "Rating:": 83,
             "Race-pace": 85,
             "Carefulness": 80,
@@ -146,6 +159,7 @@ drivers = {
     },
     "HAAS": {
         "Nico Hulkenberg": {
+            "Name": "Nico Hulkenberg",
             "Rating:": 84,
             "Race-pace": 80,
             "Carefulness": 86,
@@ -153,6 +167,7 @@ drivers = {
             "Cornering Style": "M"
         },
         "Kevin Magnussen": {
+            "Name": "Kevin Magnussen",
             "Rating:": 84,
             "Race-pace": 86,
             "Carefulness": 82,
@@ -162,6 +177,7 @@ drivers = {
     },
     "Alfa Romeo": {
         "Valtteri Bottas": {
+            "Name": "Valtteri Bottas",
             "Rating:": 88,
             "Race-pace": 87,
             "Carefulness": 89,
@@ -169,6 +185,7 @@ drivers = {
             "Cornering Style": "S"
         },
         "Guanyu Zhou": {
+            "Name": "Guanyu Zhou",
             "Rating:": 80,
             "Race-pace": 84,
             "Carefulness": 76,
@@ -178,6 +195,7 @@ drivers = {
     },
     "Williams": {
         "Alex Albon": {
+            "Name": "Alex Albon",
             "Rating:": 87,
             "Race-pace": 88,
             "Carefulness": 85,
@@ -185,6 +203,7 @@ drivers = {
             "Cornering Style": "M"
         },
         "Logan Sargeant": {
+            "Name": "Logan Sargeant",
             "Rating:": 78,
             "Race-pace": 80,
             "Carefulness": 75,
@@ -195,12 +214,21 @@ drivers = {
 
 
 }
+driver = ''
+
 
 class SetUpScreen(QMainWindow):
 
     def __init__(self):
         super(SetUpScreen, self).__init__()
         loadUi("SetUpScreen.ui", self)
+        self.confirmbutton = self.findChild(QPushButton, "confirm_button")
+
+        self.confirmbutton.clicked.connect(self.entering_race)
+
+    def entering_race(self):
+        self.close()
+
 
 class TeamSelectWindow(QMainWindow):
 
@@ -208,13 +236,117 @@ class TeamSelectWindow(QMainWindow):
         super(TeamSelectWindow, self).__init__()
         loadUi("TeamSelectMenu.ui", self)
         self.backButton = self.findChild(QPushButton, "backButton")
-        self.rb_label = self.findChild(QLabel, "rb_label")
         self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
+        self.rb_max_v_confirm = self.findChild(QPushButton, "max_v_cfm_but")
+        self.rb_srg_p_confirm = self.findChild(QPushButton, "ser_p_cfm_but")
+        self.merc_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
+        self.merc_geo_r_confirm = self.findChild(QPushButton, "geo_r_cfm_but")
+        self.fer_cha_l_confirm = self.findChild(QPushButton, "cha_l_cfm_but")
+        self.fer_car_s_confirm = self.findChild(QPushButton, "car_s_cfm_but")
+        self.mcl_lan_n_confirm = self.findChild(QPushButton, "lan_n_cfm_but")
+        self.mcl_osc_p_confirm = self.findChild(QPushButton, "osc_p_cfm_but")
+        self.alp_est_o_confirm = self.findChild(QPushButton, "est_o_cfm_but")
+        self.alp_pie_g_confirm = self.findChild(QPushButton, "pie_g_cfm_but")
 
         self.SettingsMenu = SettingsWindow()
-        self.fav_team_lbl.setText(self.SettingsMenu.fav_team_set_lbl.text())
+        self.SetUpScreen = SetUpScreen()
+
+        self.driver = ''
+        self.fav_team_lbl.setText(self.driver)
 
         self.backButton.clicked.connect(self.back_to_main_menu)
+
+        self.rb_max_v_confirm.clicked.connect(self.drv_confirmed), self.rb_max_v_confirm.clicked.connect(self.max_v)
+        self.rb_srg_p_confirm.clicked.connect(self.drv_confirmed), self.rb_srg_p_confirm.clicked.connect(self.srg_p)
+        self.merc_lew_h_confirm.clicked.connect(self.drv_confirmed), self.merc_lew_h_confirm.clicked.connect(self.lew_h)
+        self.merc_geo_r_confirm.clicked.connect(self.drv_confirmed), self.merc_geo_r_confirm.clicked.connect(self.geo_r)
+        self.fer_cha_l_confirm.clicked.connect(self.drv_confirmed), self.fer_cha_l_confirm.clicked.connect(self.cha_l)
+        self.fer_car_s_confirm.clicked.connect(self.drv_confirmed), self.fer_car_s_confirm.clicked.connect(self.car_s)
+        self.mcl_lan_n_confirm.clicked.connect(self.drv_confirmed), self.mcl_lan_n_confirm.clicked.connect(self.lan_n)
+
+    def drv_confirmed(self):
+        self.SetUpScreen.show()
+
+    def max_v(self):
+        self.driver = drivers["Red Bull"]["Max Verstappen"]
+        print(self.driver)
+
+    def srg_p(self):
+        self.driver = drivers["Red Bull"]["Sergio Perez"]
+        print(self.driver)
+
+    def lew_h(self):
+        self.driver = drivers["Mercedes"]["Lewis Hamilton"]
+        print(self.driver)
+
+    def geo_r(self):
+        self.driver = drivers["Mercedes"]["George Russell"]
+        print(self.driver)
+
+    def cha_l(self):
+        self.driver = drivers["Ferrari"]["Charles Leclerc"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def lan_n(self):
+        self.driver = drivers["McLaren"]["Lando Norris"]
+        print(self.driver)
+        return self.driver
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
+
+    def car_s(self):
+        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(self.driver)
 
     def back_to_main_menu(self):
         self.close()
@@ -235,9 +367,9 @@ class SettingsWindow(QMainWindow):
         self.label2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.slider.valueChanged.connect(self.slide_it)
-        self.backbutton.clicked.connect(self.passing_favourite_Team)
+        self.backbutton.clicked.connect(self.passing_favourite_team)
 
-    def passing_favourite_Team(self):
+    def passing_favourite_team(self):
 
         self.close()
 
@@ -292,9 +424,9 @@ class MyWindow(QMainWindow):
         self.team_select_window.show()
 
     def settings_menu(self, value):
-        self.favourite_Team = str(value)
+        self.favourite_team = str(value)
         self.settings_win.show()
-        return self.favourite_Team
+        return self.favourite_team
 
     def exit_menu(self):
         self.close()
