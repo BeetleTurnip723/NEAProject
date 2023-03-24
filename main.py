@@ -239,14 +239,25 @@ class TeamSelectWindow(QMainWindow):
         self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
         self.rb_max_v_confirm = self.findChild(QPushButton, "max_v_cfm_but")
         self.rb_srg_p_confirm = self.findChild(QPushButton, "ser_p_cfm_but")
-        self.merc_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
-        self.merc_geo_r_confirm = self.findChild(QPushButton, "geo_r_cfm_but")
+        self.mer_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
+        self.mer_geo_r_confirm = self.findChild(QPushButton, "geo_r_cfm_but")
         self.fer_cha_l_confirm = self.findChild(QPushButton, "cha_l_cfm_but")
         self.fer_car_s_confirm = self.findChild(QPushButton, "car_s_cfm_but")
         self.mcl_lan_n_confirm = self.findChild(QPushButton, "lan_n_cfm_but")
         self.mcl_osc_p_confirm = self.findChild(QPushButton, "osc_p_cfm_but")
         self.alp_est_o_confirm = self.findChild(QPushButton, "est_o_cfm_but")
         self.alp_pie_g_confirm = self.findChild(QPushButton, "pie_g_cfm_but")
+        self.ast_fer_a_confirm = self.findChild(QPushButton, "fer_a_cfm_but")
+        self.ast_lan_s_confirm = self.findChild(QPushButton, "lan_s_cfm_but")
+        self.rom_val_b_confirm = self.findChild(QPushButton, "val_b_cfm_but")
+        self.rom_gua_z_confirm = self.findChild(QPushButton, "gua_z_cfm_but")
+        self.tau_yuk_t_confirm = self.findChild(QPushButton, "yuk_t_cfm_but")
+        self.tau_nyc_d_confirm = self.findChild(QPushButton, "nyc_d_cfm_but")
+        self.haa_kev_m_confirm = self.findChild(QPushButton, "kev_m_cfm_but")
+        self.haa_nic_h_confirm = self.findChild(QPushButton, "nic_h_cfm_but")
+        self.wil_ale_a_confirm = self.findChild(QPushButton, "ale_a_cfm_but")
+        self.wil_log_s_confirm = self.findChild(QPushButton, "log_s_cfm_but")
+
 
         self.SettingsMenu = SettingsWindow()
         self.SetUpScreen = SetUpScreen()
@@ -258,11 +269,24 @@ class TeamSelectWindow(QMainWindow):
 
         self.rb_max_v_confirm.clicked.connect(self.drv_confirmed), self.rb_max_v_confirm.clicked.connect(self.max_v)
         self.rb_srg_p_confirm.clicked.connect(self.drv_confirmed), self.rb_srg_p_confirm.clicked.connect(self.srg_p)
-        self.merc_lew_h_confirm.clicked.connect(self.drv_confirmed), self.merc_lew_h_confirm.clicked.connect(self.lew_h)
-        self.merc_geo_r_confirm.clicked.connect(self.drv_confirmed), self.merc_geo_r_confirm.clicked.connect(self.geo_r)
+        self.mer_lew_h_confirm.clicked.connect(self.drv_confirmed), self.mer_lew_h_confirm.clicked.connect(self.lew_h)
+        self.mer_geo_r_confirm.clicked.connect(self.drv_confirmed), self.mer_geo_r_confirm.clicked.connect(self.geo_r)
         self.fer_cha_l_confirm.clicked.connect(self.drv_confirmed), self.fer_cha_l_confirm.clicked.connect(self.cha_l)
         self.fer_car_s_confirm.clicked.connect(self.drv_confirmed), self.fer_car_s_confirm.clicked.connect(self.car_s)
         self.mcl_lan_n_confirm.clicked.connect(self.drv_confirmed), self.mcl_lan_n_confirm.clicked.connect(self.lan_n)
+        self.mcl_osc_p_confirm.clicked.connect(self.drv_confirmed), self.mcl_osc_p_confirm.clicked.connect(self.osc_p)
+        self.alp_est_o_confirm.clicked.connect(self.drv_confirmed), self.alp_est_o_confirm.clicked.connect(self.est_o)
+        self.alp_pie_g_confirm.clicked.connect(self.drv_confirmed), self.alp_pie_g_confirm.clicked.connect(self.pie_g)
+        self.ast_fer_a_confirm.clicked.connect(self.drv_confirmed), self.ast_fer_a_confirm.clicked.connect(self.fer_a)
+        self.ast_lan_s_confirm.clicked.connect(self.drv_confirmed), self.ast_lan_s_confirm.clicked.connect(self.lan_s)
+        self.rom_val_b_confirm.clicked.connect(self.drv_confirmed), self.rom_val_b_confirm.clicked.connect(self.val_b)
+        self.rom_gua_z_confirm.clicked.connect(self.drv_confirmed), self.rom_gua_z_confirm.clicked.connect(self.gua_z)
+        self.tau_yuk_t_confirm.clicked.connect(self.drv_confirmed), self.tau_yuk_t_confirm.clicked.connect(self.yuk_t)
+        self.tau_nyc_d_confirm.clicked.connect(self.drv_confirmed), self.tau_nyc_d_confirm.clicked.connect(self.nyc_d)
+        self.haa_kev_m_confirm.clicked.connect(self.drv_confirmed), self.haa_kev_m_confirm.clicked.connect(self.kev_m)
+        self.haa_nic_h_confirm.clicked.connect(self.drv_confirmed), self.haa_nic_h_confirm.clicked.connect(self.nic_h)
+        self.wil_ale_a_confirm.clicked.connect(self.drv_confirmed), self.wil_ale_a_confirm.clicked.connect(self.ale_a)
+        self.wil_log_s_confirm.clicked.connect(self.drv_confirmed), self.wil_log_s_confirm.clicked.connect(self.log_s)
 
     def drv_confirmed(self):
         self.SetUpScreen.show()
@@ -296,56 +320,56 @@ class TeamSelectWindow(QMainWindow):
         print(self.driver)
         return self.driver
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def osc_p(self):
+        self.driver = drivers["McLaren"]["Oscar Piastri"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def est_o(self):
+        self.driver = drivers["Alpine"]["Esteban Ocon"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def pie_g(self):
+        self.driver = drivers["Alpine"]["Pierre Gasly"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def fer_a(self):
+        self.driver = drivers["Aston Martin"]["Fernando Alonso"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def lan_s(self):
+        self.driver = drivers["Aston Martin"]["Lance Stroll"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def val_b(self):
+        self.driver = drivers["Alfa Romeo"]["Valtteri Bottas"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def gua_z(self):
+        self.driver = drivers["Alfa Romeo"]["Guanyu Zhou"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def yuk_t(self):
+        self.driver = drivers["Alpha Tauri"]["Yuki Tsunoda"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def nyc_d(self):
+        self.driver = drivers["Alpha Tauri"]["Nyck de Vries"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def kev_m(self):
+        self.driver = drivers["HAAS"]["Kevin Magnussen"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def nic_h(self):
+        self.driver = drivers["HAAS"]["Nico Hulkenberg"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def ale_a(self):
+        self.driver = drivers["Williams"]["Alex Albon"]
         print(self.driver)
 
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
+    def log_s(self):
+        self.driver = drivers["Williams"]["Logan Sargeant"]
         print(self.driver)
 
     def back_to_main_menu(self):
@@ -430,6 +454,7 @@ class MyWindow(QMainWindow):
 
     def exit_menu(self):
         self.close()
+        print("Exiting...")
 
 
 def window():
