@@ -219,7 +219,15 @@ drivers = {
 driver = ''
 
 
+def scale_image(img, factor):
+    size = round(img.get_width() * factor), round(img.get_height() * factor)
+    return pygame.transform.scale(img, size)
+
+
 car = pygame.image.load('car.png')
+grass = scale_image(pygame.image.load('grass.jpeg'), 7)
+track = scale_image(pygame.image.load('track.png'), 0.6)
+track_border = scale_image(pygame.image.load('track_border.png'), 0.6)
 
 
 class SetUpScreen(QMainWindow):
@@ -241,7 +249,9 @@ class SetUpScreen(QMainWindow):
                 self.rect = self.image.get_rect()
                 self.rect.x = SCREENWIDTH / 2
                 self.rect.y = SCREENHEIGHT - 100
+                # self.speed = speed
                 self.speed = 0.0
+                # self.angle = angle
                 self.angle = 0.0
 
             def update(self):
@@ -275,51 +285,35 @@ class SetUpScreen(QMainWindow):
             def draw(self, screen):
                 pygame.draw.lines(screen, white, True, self.points)
 
+
         def main():
 
             pygame.init()
 
             screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+            screen.blit(grass, (0, 0))
+            screen.blit(track, (0, 0))
+            screen.blit(track_border, (0, 0))
             pygame.display.set_caption("Race")
 
             clock = pygame.time.Clock()
 
             car = Car()
 
-            # Create the track
-            points = [
-                (100, 100),
-                (100, 500),
-                (400, 700),
-                (700, 500),
-                (700, 100)
-            ]
-            track = Track(points)
-
-            # Start the game loop
             running = True
             while running:
-                # Handle events
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         running = False
 
-                # Update the car
                 car.update()
 
-                # Draw the track
-                track.draw(screen)
-
-                # Draw the car
                 screen.blit(car.image, car.rect)
 
                 # Update the screen
                 pygame.display.flip()
 
-                # Limit the frame rate
                 clock.tick(60)
-
-
 
         # Run the main function
         if __name__ == "__main__":
