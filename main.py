@@ -11,6 +11,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSlider, QLabel, QLineEdit
 import sys
 import math
+import time
 
 from PyQt5.uic import loadUi
 import pygame
@@ -218,7 +219,8 @@ drivers = {
 driver = ''
 
 
-car = pygame.image.load('img.png')
+car = pygame.image.load('car.png')
+
 
 class SetUpScreen(QMainWindow):
 
@@ -253,7 +255,7 @@ class SetUpScreen(QMainWindow):
                 if keys[pygame.K_RIGHT]:
                     self.angle -= 5.0
                 if keys[pygame.K_x]:
-                    self.close()
+                    pygame.quit()
 
                 self.speed *= 0.99
                 if self.speed > 10.0:
@@ -270,10 +272,8 @@ class SetUpScreen(QMainWindow):
             def __init__(self, points):
                 self.points = points
 
-
             def draw(self, screen):
                 pygame.draw.lines(screen, white, True, self.points)
-
 
         def main():
 
@@ -319,8 +319,7 @@ class SetUpScreen(QMainWindow):
                 # Limit the frame rate
                 clock.tick(60)
 
-            # Clean up
-            pygame.quit()
+
 
         # Run the main function
         if __name__ == "__main__":
