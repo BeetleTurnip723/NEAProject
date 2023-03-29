@@ -15,7 +15,6 @@ import time
 
 from PyQt5.uic import loadUi
 import pygame
-import pygame_menu
 from pygame import display
 
 SCREENWIDTH, SCREENHEIGHT = 1440, 1000
@@ -228,6 +227,13 @@ car = pygame.image.load('car.png')
 grass = scale_image(pygame.image.load('grass.jpeg'), 7)
 track = scale_image(pygame.image.load('track.png'), 0.6)
 track_border = scale_image(pygame.image.load('track_border.png'), 0.6)
+images = [(grass, (0, 0)), (track, (0, 0)), (track_border, (0, 0))]
+
+
+def blit_rotate_ctr(screen, image, top_left, angle):
+    rotated_image = pygame.transform.rotate(image, angle)
+    new_rect = rotated_image.get_rect(center=image.get_rect(topleft=top_left).center)
+    screen.blit(rotated_image, new_rect.topleft)
 
 
 class SetUpScreen(QMainWindow):
@@ -242,80 +248,92 @@ class SetUpScreen(QMainWindow):
     def entering_race(self):
         self.close()
 
-        class Car(pygame.sprite.Sprite):
-            def __init__(self):
+        class Car:
+            def __init__(self, top_vel, rot_vel):
                 super().__init__()
                 self.image = car
-                self.rect = self.image.get_rect()
-                self.rect.x = SCREENWIDTH / 2
-                self.rect.y = SCREENHEIGHT - 100
-                # self.speed = speed
+                self.top_vel = top_vel
                 self.speed = 0.0
-                # self.angle = angle
+                self.rot_vel = rot_vel
                 self.angle = 0.0
+                self.x, self.y = (400, 200)
+                self.accel = 10
 
-            def update(self):
-                keys = pygame.key.get_pressed()
-                if keys[pygame.K_UP]:
-                    self.speed += 0.1
-                if keys[pygame.K_DOWN]:
-                    self.speed -= 0.1
-                if keys[pygame.K_LEFT]:
-                    self.angle += 5.0
-                if keys[pygame.K_RIGHT]:
-                    self.angle -= 5.0
-                if keys[pygame.K_x]:
-                    pygame.quit()
+            def acc_forward(self):
+                self.speed = min(self.speed + self.accel, self.top_vel)
+                self.move()
 
-                self.speed *= 0.99
-                if self.speed > 10.0:
-                    self.speed = 10.0
-                elif self.speed < -5.0:
-                    self.speed = -5.0
+            def move(self):
+                rad = math.radians(self.angle)
+                vert = math.cos(rad) * self.speed
+                hor = math.sin(rad) * self.speed
 
-                self.rect.x += self.speed * math.sin(math.radians(self.angle))
-                self.rect.y -= self.speed * math.cos(math.radians(self.angle))
-                self.angle %= 360
+                self.y -= vert
+                self.x -= hor
 
-        class Track:
+            def decelerate(self):
+                self.speed = max(self.speed - self.accel / 10, 0)
+                self.move()
 
-            def __init__(self, points):
-                self.points = points
+            def rotate(self, left=False, right=False):
+                if left:
+                    self.angle += self.rot_vel
+                elif right:
+                    self.angle -= self.rot_vel
 
             def draw(self, screen):
-                pygame.draw.lines(screen, white, True, self.points)
+                blit_rotate_ctr(screen, self.image, (self.x, self.y), self.angle)
 
+            def collide(self, mask, x=0, y=0):
+                car_mask = pygame.mask.from_surface(car)
+                offset = int(self.x - x)
+
+
+            def bounce(self):
+                self.speed = -self.speed
 
         def main():
 
             pygame.init()
 
             screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-            screen.blit(grass, (0, 0))
-            screen.blit(track, (0, 0))
-            screen.blit(track_border, (0, 0))
             pygame.display.set_caption("Race")
-
+            car = Car(6, 6)
             clock = pygame.time.Clock()
-
-            car = Car()
-
             running = True
             while running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        running = False
-
-                car.update()
-
-                screen.blit(car.image, car.rect)
-
-                # Update the screen
-                pygame.display.flip()
 
                 clock.tick(60)
 
-        # Run the main function
+                draw(screen, images, car)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        break
+
+                keys = pygame.key.get_pressed()
+                moving = False
+
+                if keys[pygame.K_LEFT]:
+                    car.rotate(left=True)
+                if keys[pygame.K_RIGHT]:
+                    car.rotate(right=True)
+                if keys[pygame.K_UP]:
+                    moving = True
+                    car.acc_forward()
+                if not moving:
+                    car.decelerate()
+                if keys[pygame.K_x]:
+                    pygame.quit()
+
+        def draw(screen, images, car):
+            for img, pos in images:
+                screen.blit(img, pos)
+
+            car.draw(screen)
+            pygame.display.update()
+
         if __name__ == "__main__":
             main()
         self.close()
@@ -348,7 +366,6 @@ class TeamSelectWindow(QMainWindow):
         self.haa_nic_h_confirm = self.findChild(QPushButton, "nic_h_cfm_but")
         self.wil_ale_a_confirm = self.findChild(QPushButton, "ale_a_cfm_but")
         self.wil_log_s_confirm = self.findChild(QPushButton, "log_s_cfm_but")
-
 
         self.SettingsMenu = SettingsWindow()
         self.SetUpScreen = SetUpScreen()
@@ -409,7 +426,6 @@ class TeamSelectWindow(QMainWindow):
     def lan_n(self):
         self.driver = drivers["McLaren"]["Lando Norris"]
         print(self.driver)
-        return self.driver
 
     def osc_p(self):
         self.driver = drivers["McLaren"]["Oscar Piastri"]
@@ -476,7 +492,6 @@ class SettingsWindow(QMainWindow):
         self.fav_team_set_lbl = self.findChild(QLabel, "fav_team_set_lbl")
         self.label2 = self.findChild(QLabel, "label_2")
         self.backbutton = self.findChild(QPushButton, "back_button")
-        # self.TeamSelectMenu = TeamSelectWindow()
 
         self.fav_team_set_lbl.setAlignment(QtCore.Qt.AlignCenter)
         self.label2.setAlignment(QtCore.Qt.AlignCenter)
