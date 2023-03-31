@@ -227,7 +227,11 @@ car = pygame.image.load('car.png')
 grass = scale_image(pygame.image.load('grass.jpeg'), 7)
 track = scale_image(pygame.image.load('track.png'), 0.6)
 track_border = scale_image(pygame.image.load('track_border.png'), 0.6)
-images = [(grass, (0, 0)), (track, (0, 0)), (track_border, (0, 0))]
+track_bord_mask = pygame.mask.from_surface(track_border)
+finish_line = scale_image(pygame.image.load('finish_line.jpeg'), 0.1)
+finish_line_mask = pygame.mask.from_surface(finish_line)
+fin_pos = (500, 640)
+images = [(grass, (0, 0)), (track, (0, 0)), (finish_line, (500, 640)), (track_border, (0, 0))]
 
 
 def blit_rotate_ctr(screen, image, top_left, angle):
@@ -235,6 +239,11 @@ def blit_rotate_ctr(screen, image, top_left, angle):
     new_rect = rotated_image.get_rect(center=image.get_rect(topleft=top_left).center)
     screen.blit(rotated_image, new_rect.topleft)
 
+
+class LapFinishedMenu(QMainWindow):
+    def __init__(self):
+        super(LapFinishedMenu, self).__init__()
+        loadUi('LapFinishedMenu.ui')
 
 class SetUpScreen(QMainWindow):
 
@@ -248,15 +257,16 @@ class SetUpScreen(QMainWindow):
     def entering_race(self):
         self.close()
 
-        class Car:
+        class Car(QMainWindow):
             def __init__(self, top_vel, rot_vel):
                 super().__init__()
+                loadUi('LapFinishedMenu.ui')
                 self.image = car
                 self.top_vel = top_vel
                 self.speed = 0.0
                 self.rot_vel = rot_vel
-                self.angle = 0.0
-                self.x, self.y = (400, 200)
+                self.angle = 270.0
+                self.x, self.y = (550, 650)
                 self.accel = 10
 
             def acc_forward(self):
@@ -286,11 +296,26 @@ class SetUpScreen(QMainWindow):
 
             def collide(self, mask, x=0, y=0):
                 car_mask = pygame.mask.from_surface(car)
-                offset = int(self.x - x)
-
+                offset = (int(self.x - x), int(self.y - y))
+                poc = mask.overlap(car_mask, offset)
+                return poc
 
             def bounce(self):
-                self.speed = -self.speed
+                self.speed = -self.speed * 3
+                self.move()
+
+            def rev_bounce(self):
+                self.speed = -self.speed * 3
+                self.move()
+
+            def reverse(self):
+                self.speed = max(self.speed - self.accel, -self.top_vel / 2)
+                self.move()
+
+            def restart(self):
+                self.x, self.y = (550, 650)
+                self.angle = 270.0
+                self.speed = 0
 
         def main():
 
@@ -313,6 +338,8 @@ class SetUpScreen(QMainWindow):
                         break
 
                 keys = pygame.key.get_pressed()
+                track_collision = car.collide(track_bord_mask)
+                finish_collision = car.collide(finish_line_mask, *fin_pos)
                 moving = False
 
                 if keys[pygame.K_LEFT]:
@@ -322,10 +349,30 @@ class SetUpScreen(QMainWindow):
                 if keys[pygame.K_UP]:
                     moving = True
                     car.acc_forward()
+                if keys[pygame.K_DOWN]:
+                    car.reverse()
+                    if finish_collision != None:
+                        car.rev_bounce()
+                    if track_collision != None:
+                        car.rev_bounce()
                 if not moving:
                     car.decelerate()
                 if keys[pygame.K_x]:
                     pygame.quit()
+
+                if car.collide(track_bord_mask) != None:
+                    car.bounce()
+
+                if finish_collision != None:
+                    if finish_collision[0] == 24:
+                        car.bounce()
+                    else:
+
+                        LapFinishedMenu.show(self)
+
+                        car.restart()
+
+
 
         def draw(screen, images, car):
             for img, pos in images:
