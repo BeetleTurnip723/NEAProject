@@ -2,9 +2,8 @@
 NEA Year 12 Project
 Author: Joe Sykes
 Date Started: 9/9/22
-Idea:
-My idea for my NEA is to make a formula one set-up simulator where you get randomised a track, and either if it is raining or not, and you choose your driver and try to create the perfect set-up for them to win the race
 '''
+
 # automake the other drivers set-ups and then give a recommendation to the reader to say what they can do better
 import PyQt5
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -12,10 +11,12 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QPushButton, QSl
 import sys
 import math
 import time
-
+import random
 from PyQt5.uic import loadUi
 import pygame
 from pygame import display
+
+pygame.font.init()
 
 SCREENWIDTH, SCREENHEIGHT = 1440, 1000
 black = (0, 0, 0)
@@ -216,6 +217,7 @@ drivers = {
 
 }
 driver = ''
+finish_lap_time = 0
 
 
 def scale_image(img, factor):
@@ -231,6 +233,7 @@ track_bord_mask = pygame.mask.from_surface(track_border)
 finish_line = scale_image(pygame.image.load('finish_line.jpeg'), 0.1)
 finish_line_mask = pygame.mask.from_surface(finish_line)
 fin_pos = (500, 640)
+font = pygame.font.SysFont("monospace", 50)
 images = [(grass, (0, 0)), (track, (0, 0)), (finish_line, (500, 640)), (track_border, (0, 0))]
 
 
@@ -240,294 +243,34 @@ def blit_rotate_ctr(screen, image, top_left, angle):
     screen.blit(rotated_image, new_rect.topleft)
 
 
-class LapFinishedMenu(QMainWindow):
-    def __init__(self):
-        super(LapFinishedMenu, self).__init__()
-        loadUi('LapFinishedMenu.ui')
-
-class SetUpScreen(QMainWindow):
+class MyWindow(QMainWindow):
 
     def __init__(self):
-        super(SetUpScreen, self).__init__()
-        loadUi("SetUpScreen.ui", self)
-        self.confirmbutton = self.findChild(QPushButton, "confirm_button")
+        super(MyWindow, self).__init__()
+        loadUi("MAINMENU.ui", self)
+        self.playButton = self.findChild(QPushButton, "playButton")
+        self.settingsButton = self.findChild(QPushButton, "settingsButton")
+        self.exitButton = self.findChild(QPushButton, "exitButton")
 
-        self.confirmbutton.clicked.connect(self.entering_race)
+        self.playButton.clicked.connect(self.team_select_menu)
+        self.settingsButton.clicked.connect(self.settings_menu)
+        self.exitButton.clicked.connect(self.exit_menu)
 
-    def entering_race(self):
+        self.team_select_window = TeamSelectWindow()
+        self.settings_win = SettingsWindow()
+        self.show()
+
+    def team_select_menu(self):
+        self.team_select_window.show()
+
+    def settings_menu(self, value):
+        self.favourite_team = str(value)
+        self.settings_win.show()
+        return self.favourite_team
+
+    def exit_menu(self):
         self.close()
-
-        class Car(QMainWindow):
-            def __init__(self, top_vel, rot_vel):
-                super().__init__()
-                loadUi('LapFinishedMenu.ui')
-                self.image = car
-                self.top_vel = top_vel
-                self.speed = 0.0
-                self.rot_vel = rot_vel
-                self.angle = 270.0
-                self.x, self.y = (550, 650)
-                self.accel = 10
-
-            def acc_forward(self):
-                self.speed = min(self.speed + self.accel, self.top_vel)
-                self.move()
-
-            def move(self):
-                rad = math.radians(self.angle)
-                vert = math.cos(rad) * self.speed
-                hor = math.sin(rad) * self.speed
-
-                self.y -= vert
-                self.x -= hor
-
-            def decelerate(self):
-                self.speed = max(self.speed - self.accel / 10, 0)
-                self.move()
-
-            def rotate(self, left=False, right=False):
-                if left:
-                    self.angle += self.rot_vel
-                elif right:
-                    self.angle -= self.rot_vel
-
-            def draw(self, screen):
-                blit_rotate_ctr(screen, self.image, (self.x, self.y), self.angle)
-
-            def collide(self, mask, x=0, y=0):
-                car_mask = pygame.mask.from_surface(car)
-                offset = (int(self.x - x), int(self.y - y))
-                poc = mask.overlap(car_mask, offset)
-                return poc
-
-            def bounce(self):
-                self.speed = -self.speed * 3
-                self.move()
-
-            def rev_bounce(self):
-                self.speed = -self.speed * 3
-                self.move()
-
-            def reverse(self):
-                self.speed = max(self.speed - self.accel, -self.top_vel / 2)
-                self.move()
-
-            def restart(self):
-                self.x, self.y = (550, 650)
-                self.angle = 270.0
-                self.speed = 0
-
-        def main():
-
-            pygame.init()
-
-            screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
-            pygame.display.set_caption("Race")
-            car = Car(6, 6)
-            clock = pygame.time.Clock()
-            running = True
-            while running:
-
-                clock.tick(60)
-
-                draw(screen, images, car)
-
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        running = False
-                        break
-
-                keys = pygame.key.get_pressed()
-                track_collision = car.collide(track_bord_mask)
-                finish_collision = car.collide(finish_line_mask, *fin_pos)
-                moving = False
-
-                if keys[pygame.K_LEFT]:
-                    car.rotate(left=True)
-                if keys[pygame.K_RIGHT]:
-                    car.rotate(right=True)
-                if keys[pygame.K_UP]:
-                    moving = True
-                    car.acc_forward()
-                if keys[pygame.K_DOWN]:
-                    car.reverse()
-                    if finish_collision != None:
-                        car.rev_bounce()
-                    if track_collision != None:
-                        car.rev_bounce()
-                if not moving:
-                    car.decelerate()
-                if keys[pygame.K_x]:
-                    pygame.quit()
-
-                if car.collide(track_bord_mask) != None:
-                    car.bounce()
-
-                if finish_collision != None:
-                    if finish_collision[0] == 24:
-                        car.bounce()
-                    else:
-
-                        LapFinishedMenu.show(self)
-
-                        car.restart()
-
-
-
-        def draw(screen, images, car):
-            for img, pos in images:
-                screen.blit(img, pos)
-
-            car.draw(screen)
-            pygame.display.update()
-
-        if __name__ == "__main__":
-            main()
-        self.close()
-
-
-class TeamSelectWindow(QMainWindow):
-
-    def __init__(self):
-        super(TeamSelectWindow, self).__init__()
-        loadUi("TeamSelectMenu.ui", self)
-        self.backButton = self.findChild(QPushButton, "backButton")
-        self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
-        self.rb_max_v_confirm = self.findChild(QPushButton, "max_v_cfm_but")
-        self.rb_srg_p_confirm = self.findChild(QPushButton, "ser_p_cfm_but")
-        self.mer_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
-        self.mer_geo_r_confirm = self.findChild(QPushButton, "geo_r_cfm_but")
-        self.fer_cha_l_confirm = self.findChild(QPushButton, "cha_l_cfm_but")
-        self.fer_car_s_confirm = self.findChild(QPushButton, "car_s_cfm_but")
-        self.mcl_lan_n_confirm = self.findChild(QPushButton, "lan_n_cfm_but")
-        self.mcl_osc_p_confirm = self.findChild(QPushButton, "osc_p_cfm_but")
-        self.alp_est_o_confirm = self.findChild(QPushButton, "est_o_cfm_but")
-        self.alp_pie_g_confirm = self.findChild(QPushButton, "pie_g_cfm_but")
-        self.ast_fer_a_confirm = self.findChild(QPushButton, "fer_a_cfm_but")
-        self.ast_lan_s_confirm = self.findChild(QPushButton, "lan_s_cfm_but")
-        self.rom_val_b_confirm = self.findChild(QPushButton, "val_b_cfm_but")
-        self.rom_gua_z_confirm = self.findChild(QPushButton, "gua_z_cfm_but")
-        self.tau_yuk_t_confirm = self.findChild(QPushButton, "yuk_t_cfm_but")
-        self.tau_nyc_d_confirm = self.findChild(QPushButton, "nyc_d_cfm_but")
-        self.haa_kev_m_confirm = self.findChild(QPushButton, "kev_m_cfm_but")
-        self.haa_nic_h_confirm = self.findChild(QPushButton, "nic_h_cfm_but")
-        self.wil_ale_a_confirm = self.findChild(QPushButton, "ale_a_cfm_but")
-        self.wil_log_s_confirm = self.findChild(QPushButton, "log_s_cfm_but")
-
-        self.SettingsMenu = SettingsWindow()
-        self.SetUpScreen = SetUpScreen()
-
-        self.driver = ''
-        self.fav_team_lbl.setText(self.driver)
-
-        self.backButton.clicked.connect(self.back_to_main_menu)
-
-        self.rb_max_v_confirm.clicked.connect(self.drv_confirmed), self.rb_max_v_confirm.clicked.connect(self.max_v)
-        self.rb_srg_p_confirm.clicked.connect(self.drv_confirmed), self.rb_srg_p_confirm.clicked.connect(self.srg_p)
-        self.mer_lew_h_confirm.clicked.connect(self.drv_confirmed), self.mer_lew_h_confirm.clicked.connect(self.lew_h)
-        self.mer_geo_r_confirm.clicked.connect(self.drv_confirmed), self.mer_geo_r_confirm.clicked.connect(self.geo_r)
-        self.fer_cha_l_confirm.clicked.connect(self.drv_confirmed), self.fer_cha_l_confirm.clicked.connect(self.cha_l)
-        self.fer_car_s_confirm.clicked.connect(self.drv_confirmed), self.fer_car_s_confirm.clicked.connect(self.car_s)
-        self.mcl_lan_n_confirm.clicked.connect(self.drv_confirmed), self.mcl_lan_n_confirm.clicked.connect(self.lan_n)
-        self.mcl_osc_p_confirm.clicked.connect(self.drv_confirmed), self.mcl_osc_p_confirm.clicked.connect(self.osc_p)
-        self.alp_est_o_confirm.clicked.connect(self.drv_confirmed), self.alp_est_o_confirm.clicked.connect(self.est_o)
-        self.alp_pie_g_confirm.clicked.connect(self.drv_confirmed), self.alp_pie_g_confirm.clicked.connect(self.pie_g)
-        self.ast_fer_a_confirm.clicked.connect(self.drv_confirmed), self.ast_fer_a_confirm.clicked.connect(self.fer_a)
-        self.ast_lan_s_confirm.clicked.connect(self.drv_confirmed), self.ast_lan_s_confirm.clicked.connect(self.lan_s)
-        self.rom_val_b_confirm.clicked.connect(self.drv_confirmed), self.rom_val_b_confirm.clicked.connect(self.val_b)
-        self.rom_gua_z_confirm.clicked.connect(self.drv_confirmed), self.rom_gua_z_confirm.clicked.connect(self.gua_z)
-        self.tau_yuk_t_confirm.clicked.connect(self.drv_confirmed), self.tau_yuk_t_confirm.clicked.connect(self.yuk_t)
-        self.tau_nyc_d_confirm.clicked.connect(self.drv_confirmed), self.tau_nyc_d_confirm.clicked.connect(self.nyc_d)
-        self.haa_kev_m_confirm.clicked.connect(self.drv_confirmed), self.haa_kev_m_confirm.clicked.connect(self.kev_m)
-        self.haa_nic_h_confirm.clicked.connect(self.drv_confirmed), self.haa_nic_h_confirm.clicked.connect(self.nic_h)
-        self.wil_ale_a_confirm.clicked.connect(self.drv_confirmed), self.wil_ale_a_confirm.clicked.connect(self.ale_a)
-        self.wil_log_s_confirm.clicked.connect(self.drv_confirmed), self.wil_log_s_confirm.clicked.connect(self.log_s)
-
-    def drv_confirmed(self):
-        self.SetUpScreen.show()
-
-    def max_v(self):
-        self.driver = drivers["Red Bull"]["Max Verstappen"]
-        print(self.driver)
-
-    def srg_p(self):
-        self.driver = drivers["Red Bull"]["Sergio Perez"]
-        print(self.driver)
-
-    def lew_h(self):
-        self.driver = drivers["Mercedes"]["Lewis Hamilton"]
-        print(self.driver)
-
-    def geo_r(self):
-        self.driver = drivers["Mercedes"]["George Russell"]
-        print(self.driver)
-
-    def cha_l(self):
-        self.driver = drivers["Ferrari"]["Charles Leclerc"]
-        print(self.driver)
-
-    def car_s(self):
-        self.driver = drivers["Ferrari"]["Carlos Sainz"]
-        print(self.driver)
-
-    def lan_n(self):
-        self.driver = drivers["McLaren"]["Lando Norris"]
-        print(self.driver)
-
-    def osc_p(self):
-        self.driver = drivers["McLaren"]["Oscar Piastri"]
-        print(self.driver)
-
-    def est_o(self):
-        self.driver = drivers["Alpine"]["Esteban Ocon"]
-        print(self.driver)
-
-    def pie_g(self):
-        self.driver = drivers["Alpine"]["Pierre Gasly"]
-        print(self.driver)
-
-    def fer_a(self):
-        self.driver = drivers["Aston Martin"]["Fernando Alonso"]
-        print(self.driver)
-
-    def lan_s(self):
-        self.driver = drivers["Aston Martin"]["Lance Stroll"]
-        print(self.driver)
-
-    def val_b(self):
-        self.driver = drivers["Alfa Romeo"]["Valtteri Bottas"]
-        print(self.driver)
-
-    def gua_z(self):
-        self.driver = drivers["Alfa Romeo"]["Guanyu Zhou"]
-        print(self.driver)
-
-    def yuk_t(self):
-        self.driver = drivers["Alpha Tauri"]["Yuki Tsunoda"]
-        print(self.driver)
-
-    def nyc_d(self):
-        self.driver = drivers["Alpha Tauri"]["Nyck de Vries"]
-        print(self.driver)
-
-    def kev_m(self):
-        self.driver = drivers["HAAS"]["Kevin Magnussen"]
-        print(self.driver)
-
-    def nic_h(self):
-        self.driver = drivers["HAAS"]["Nico Hulkenberg"]
-        print(self.driver)
-
-    def ale_a(self):
-        self.driver = drivers["Williams"]["Alex Albon"]
-        print(self.driver)
-
-    def log_s(self):
-        self.driver = drivers["Williams"]["Logan Sargeant"]
-        print(self.driver)
-
-    def back_to_main_menu(self):
-        self.close()
+        print("Exiting...")
 
 
 class SettingsWindow(QMainWindow):
@@ -580,34 +323,374 @@ class SettingsWindow(QMainWindow):
         self.close()
 
 
-class MyWindow(QMainWindow):
+class TeamSelectWindow(QMainWindow):
 
     def __init__(self):
-        super(MyWindow, self).__init__()
-        loadUi("MAINMENU.ui", self)
-        self.playButton = self.findChild(QPushButton, "playButton")
-        self.settingsButton = self.findChild(QPushButton, "settingsButton")
-        self.exitButton = self.findChild(QPushButton, "exitButton")
+        super(TeamSelectWindow, self).__init__()
+        loadUi("TeamSelectMenu.ui", self)
+        self.backButton = self.findChild(QPushButton, "backButton")
+        self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
+        self.rb_max_v_confirm = self.findChild(QPushButton, "max_v_cfm_but")
+        self.rb_srg_p_confirm = self.findChild(QPushButton, "ser_p_cfm_but")
+        self.mer_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
+        self.mer_geo_r_confirm = self.findChild(QPushButton, "geo_r_cfm_but")
+        self.fer_cha_l_confirm = self.findChild(QPushButton, "cha_l_cfm_but")
+        self.fer_car_s_confirm = self.findChild(QPushButton, "car_s_cfm_but")
+        self.mcl_lan_n_confirm = self.findChild(QPushButton, "lan_n_cfm_but")
+        self.mcl_osc_p_confirm = self.findChild(QPushButton, "osc_p_cfm_but")
+        self.alp_est_o_confirm = self.findChild(QPushButton, "est_o_cfm_but")
+        self.alp_pie_g_confirm = self.findChild(QPushButton, "pie_g_cfm_but")
+        self.ast_fer_a_confirm = self.findChild(QPushButton, "fer_a_cfm_but")
+        self.ast_lan_s_confirm = self.findChild(QPushButton, "lan_s_cfm_but")
+        self.rom_val_b_confirm = self.findChild(QPushButton, "val_b_cfm_but")
+        self.rom_gua_z_confirm = self.findChild(QPushButton, "gua_z_cfm_but")
+        self.tau_yuk_t_confirm = self.findChild(QPushButton, "yuk_t_cfm_but")
+        self.tau_nyc_d_confirm = self.findChild(QPushButton, "nyc_d_cfm_but")
+        self.haa_kev_m_confirm = self.findChild(QPushButton, "kev_m_cfm_but")
+        self.haa_nic_h_confirm = self.findChild(QPushButton, "nic_h_cfm_but")
+        self.wil_ale_a_confirm = self.findChild(QPushButton, "ale_a_cfm_but")
+        self.wil_log_s_confirm = self.findChild(QPushButton, "log_s_cfm_but")
 
-        self.playButton.clicked.connect(self.team_select_menu)
-        self.settingsButton.clicked.connect(self.settings_menu)
-        self.exitButton.clicked.connect(self.exit_menu)
+        self.SettingsMenu = SettingsWindow()
+        self.SetUpScreen = SetUpScreen()
 
-        self.team_select_window = TeamSelectWindow()
-        self.settings_win = SettingsWindow()
-        self.show()
 
-    def team_select_menu(self):
-        self.team_select_window.show()
+        self.fav_team_lbl.setText(driver)
 
-    def settings_menu(self, value):
-        self.favourite_team = str(value)
-        self.settings_win.show()
-        return self.favourite_team
+        self.backButton.clicked.connect(self.back_to_main_menu)
 
-    def exit_menu(self):
+        self.rb_max_v_confirm.clicked.connect(self.drv_confirmed), self.rb_max_v_confirm.clicked.connect(self.max_v)
+        self.rb_srg_p_confirm.clicked.connect(self.drv_confirmed), self.rb_srg_p_confirm.clicked.connect(self.srg_p)
+        self.mer_lew_h_confirm.clicked.connect(self.drv_confirmed), self.mer_lew_h_confirm.clicked.connect(self.lew_h)
+        self.mer_geo_r_confirm.clicked.connect(self.drv_confirmed), self.mer_geo_r_confirm.clicked.connect(self.geo_r)
+        self.fer_cha_l_confirm.clicked.connect(self.drv_confirmed), self.fer_cha_l_confirm.clicked.connect(self.cha_l)
+        self.fer_car_s_confirm.clicked.connect(self.drv_confirmed), self.fer_car_s_confirm.clicked.connect(self.car_s)
+        self.mcl_lan_n_confirm.clicked.connect(self.drv_confirmed), self.mcl_lan_n_confirm.clicked.connect(self.lan_n)
+        self.mcl_osc_p_confirm.clicked.connect(self.drv_confirmed), self.mcl_osc_p_confirm.clicked.connect(self.osc_p)
+        self.alp_est_o_confirm.clicked.connect(self.drv_confirmed), self.alp_est_o_confirm.clicked.connect(self.est_o)
+        self.alp_pie_g_confirm.clicked.connect(self.drv_confirmed), self.alp_pie_g_confirm.clicked.connect(self.pie_g)
+        self.ast_fer_a_confirm.clicked.connect(self.drv_confirmed), self.ast_fer_a_confirm.clicked.connect(self.fer_a)
+        self.ast_lan_s_confirm.clicked.connect(self.drv_confirmed), self.ast_lan_s_confirm.clicked.connect(self.lan_s)
+        self.rom_val_b_confirm.clicked.connect(self.drv_confirmed), self.rom_val_b_confirm.clicked.connect(self.val_b)
+        self.rom_gua_z_confirm.clicked.connect(self.drv_confirmed), self.rom_gua_z_confirm.clicked.connect(self.gua_z)
+        self.tau_yuk_t_confirm.clicked.connect(self.drv_confirmed), self.tau_yuk_t_confirm.clicked.connect(self.yuk_t)
+        self.tau_nyc_d_confirm.clicked.connect(self.drv_confirmed), self.tau_nyc_d_confirm.clicked.connect(self.nyc_d)
+        self.haa_kev_m_confirm.clicked.connect(self.drv_confirmed), self.haa_kev_m_confirm.clicked.connect(self.kev_m)
+        self.haa_nic_h_confirm.clicked.connect(self.drv_confirmed), self.haa_nic_h_confirm.clicked.connect(self.nic_h)
+        self.wil_ale_a_confirm.clicked.connect(self.drv_confirmed), self.wil_ale_a_confirm.clicked.connect(self.ale_a)
+        self.wil_log_s_confirm.clicked.connect(self.drv_confirmed), self.wil_log_s_confirm.clicked.connect(self.log_s)
+
+    def drv_confirmed(self):
+        self.SetUpScreen.show()
+
+    def max_v(self):
+        global driver
+        driver = drivers["Red Bull"]["Max Verstappen"]
+        print(driver)
+
+    def srg_p(self):
+        global driver
+        driver = drivers["Red Bull"]["Sergio Perez"]
+        print(driver)
+
+    def lew_h(self):
+        global driver
+        driver = drivers["Mercedes"]["Lewis Hamilton"]
+        print(driver)
+
+    def geo_r(self):
+        global driver
+        driver = drivers["Mercedes"]["George Russell"]
+        print(driver)
+
+    def cha_l(self):
+        global driver
+        driver = drivers["Ferrari"]["Charles Leclerc"]
+        print(driver)
+
+    def car_s(self):
+        global driver
+        driver = drivers["Ferrari"]["Carlos Sainz"]
+        print(driver)
+
+    def lan_n(self):
+        global driver
+        driver = drivers["McLaren"]["Lando Norris"]
+        print(driver)
+
+    def osc_p(self):
+        global driver
+        driver = drivers["McLaren"]["Oscar Piastri"]
+        print(driver)
+
+    def est_o(self):
+        global driver
+        driver = drivers["Alpine"]["Esteban Ocon"]
+        print(driver)
+
+    def pie_g(self):
+        global driver
+        driver = drivers["Alpine"]["Pierre Gasly"]
+        print(driver)
+
+    def fer_a(self):
+        global driver
+        driver = drivers["Aston Martin"]["Fernando Alonso"]
+        print(driver)
+
+    def lan_s(self):
+        global driver
+        driver = drivers["Aston Martin"]["Lance Stroll"]
+        print(driver)
+
+    def val_b(self):
+        global driver
+        driver = drivers["Alfa Romeo"]["Valtteri Bottas"]
+        print(driver)
+
+    def gua_z(self):
+        global driver
+        driver = drivers["Alfa Romeo"]["Guanyu Zhou"]
+        print(driver)
+
+    def yuk_t(self):
+        global driver
+        driver = drivers["Alpha Tauri"]["Yuki Tsunoda"]
+        print(driver)
+
+    def nyc_d(self):
+        global driver
+        driver = drivers["Alpha Tauri"]["Nyck de Vries"]
+        print(driver)
+
+    def kev_m(self):
+        global driver
+        driver = drivers["HAAS"]["Kevin Magnussen"]
+        print(driver)
+
+    def nic_h(self):
+        global driver
+        driver = drivers["HAAS"]["Nico Hulkenberg"]
+        print(driver)
+
+    def ale_a(self):
+        global driver
+        driver = drivers["Williams"]["Alex Albon"]
+        print(driver)
+
+    def log_s(self):
+        global driver
+        driver = drivers["Williams"]["Logan Sargeant"]
+        print(driver)
+
+    def back_to_main_menu(self):
         self.close()
-        print("Exiting...")
+
+
+class SetUpScreen(QMainWindow):
+
+    def __init__(self):
+        super(SetUpScreen, self).__init__()
+        loadUi("SetUpScreen.ui", self)
+        self.confirmbutton = self.findChild(QPushButton, "confirm_button")
+        self.confirmbutton.clicked.connect(self.entering_race)
+        self.lap_menu = LapFinishedMenu()
+        self.race_sim = RaceSimulation()
+
+    def entering_race(self):
+        self.close()
+
+        class Car():
+
+            def __init__(self, top_vel, rot_vel):
+                super().__init__()
+                self.image = car
+                self.top_vel = top_vel
+                self.speed = 0.0
+                self.rot_vel = rot_vel
+                self.angle = 270.0
+                self.x, self.y = (550, 650)
+                self.accel = 10
+                self.level_start_time = 0
+                self.start = False
+
+            def acc_forward(self):
+                self.speed = min(self.speed + self.accel, self.top_vel)
+                self.move()
+
+            def move(self):
+                rad = math.radians(self.angle)
+                vert = math.cos(rad) * self.speed
+                hor = math.sin(rad) * self.speed
+
+                self.y -= vert
+                self.x -= hor
+
+            def decelerate(self):
+                self.speed = max(self.speed - self.accel / 10, 0)
+                self.move()
+
+            def rotate(self, left=False, right=False):
+                if left:
+                    self.angle += self.rot_vel
+                elif right:
+                    self.angle -= self.rot_vel
+
+            def draw(self, screen):
+                blit_rotate_ctr(screen, self.image, (self.x, self.y), self.angle)
+
+            def collide(self, mask, x=0, y=0):
+                car_mask = pygame.mask.from_surface(car)
+                offset = (int(self.x - x), int(self.y - y))
+                poc = mask.overlap(car_mask, offset)
+                return poc
+
+            def bounce(self):
+                self.speed = -self.speed * 3
+                self.move()
+
+            def rev_bounce(self):
+                self.speed = -self.speed * 3
+                self.move()
+
+            def reverse(self):
+                self.speed = max(self.speed - self.accel, -self.top_vel / 2)
+                self.move()
+
+            def restart(self):
+                self.x, self.y = (550, 650)
+                self.angle = 270.0
+                self.speed = 0
+
+            def start_level(self):
+                self.start = True
+                self.level_start_time = time.time()
+
+            def lap_time(self):
+                if not self.start:
+                    return 0
+                return round(time.time() - self.level_start_time)
+
+        def main():
+
+            pygame.init()
+
+            screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
+            pygame.display.set_caption("Race")
+            car = Car(6, 6)
+            clock = pygame.time.Clock()
+
+            running = True
+            while running:
+
+                clock.tick(60)
+
+                draw(screen, images, car)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        break
+
+                while not car.start:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            running = False
+                            break
+                        if event.type == pygame.KEYDOWN:
+                            car.start_level()
+
+                keys = pygame.key.get_pressed()
+                track_collision = car.collide(track_bord_mask)
+                finish_collision = car.collide(finish_line_mask, *fin_pos)
+                moving = False
+
+                if keys[pygame.K_LEFT]:
+                    car.rotate(left=True)
+                if keys[pygame.K_RIGHT]:
+                    car.rotate(right=True)
+                if keys[pygame.K_UP]:
+                    moving = True
+                    car.acc_forward()
+                if keys[pygame.K_DOWN]:
+                    car.reverse()
+                    if finish_collision != None:
+                        car.rev_bounce()
+                    if track_collision != None:
+                        car.rev_bounce()
+                if not moving:
+                    car.decelerate()
+                if keys[pygame.K_x]:
+                    pygame.quit()
+
+                if car.collide(track_bord_mask) != None:
+                    car.bounce()
+
+                if finish_collision != None:
+                    if finish_collision[0] == 24:
+                        car.bounce()
+                    else:
+                        screen.fill(black)
+                        global finish_lap_time
+                        finish_lap_time = car.lap_time()
+                        print(finish_lap_time)
+                        break
+
+            pygame.display.quit()
+
+        def draw(screen, images, car):
+            for img, pos in images:
+                screen.blit(img, pos)
+                time_text = font.render(f"Time: {car.lap_time()}s", 1, (255, 255, 255))
+                screen.blit(time_text, (10, 700))
+
+            car.draw(screen)
+            pygame.display.update()
+
+        if __name__ == "__main__":
+            main()
+        self.lap_finished()
+        print(self.race_sim.ovr_driver_stat())
+
+    def lap_finished(self):
+        self.lap_menu.show()
+
+
+class LapFinishedMenu(QMainWindow):
+    def __init__(self):
+        super(LapFinishedMenu, self).__init__()
+        loadUi('LapFinishedMenu.ui', self)
+        self.race_sim = RaceSimulation()
+
+
+class RaceSimulation:
+
+    def IsItRaining(self):
+        global raining
+        raining = False
+        rain_chance = random.randint(1, 30)
+        if rain_chance <= 4:
+            raining = True
+            print("It is raining")
+        else:
+            print("It is not")
+
+    def ovr_driver_stat(self):
+        if driver['Cornering Style'] == 'F':
+            driver_style_ovr = 90
+        elif driver['Cornering Style'] == 'M':
+            driver_style_ovr = 95
+        else:
+            driver_style_ovr = 85
+        driver_OVR = driver['Carefulness'] + driver['Wet-weather Driving'] + driver_style_ovr
+
+
+    def UltimateRacePace(self):
+        self.IsItRaining()
+        if raining == True:
+            race_pos = 6
+            print(race_pos)
+
 
 
 def window():
@@ -621,6 +704,4 @@ def window():
 
 window()
 
-
-print(drivers['Mercedes']['Lewis Hamilton'])
 
