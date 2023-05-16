@@ -40,7 +40,7 @@ drivers = {
         },
         "George Russell": {
             "Name": "George Russell",
-            "Rating:": 89,
+            "Rating": 89,
             "Race-pace": 93,
             "Carefulness": 84,
             "Wet-weather Driving": 90,
@@ -51,7 +51,7 @@ drivers = {
     "Red Bull": {
         "Max Verstappen": {
             "Name": "Max Verstappen",
-            "Rating:": 97,
+            "Rating": 97,
             "Race-pace": 99,
             "Carefulness": 92,
             "Wet-weather Driving": 99,
@@ -59,7 +59,7 @@ drivers = {
         },
         "Sergio Perez": {
             "Name": "Sergio Perez",
-            "Rating:": 88,
+            "Rating": 88,
             "Race-pace": 82,
             "Carefulness": 95,
             "Wet-weather Driving": 87,
@@ -70,7 +70,7 @@ drivers = {
     "Ferrari": {
         "Charles Leclerc": {
             "Name": "Charles Leclerc",
-            "Rating:": 91,
+            "Rating": 91,
             "Race-pace": 94,
             "Carefulness": 90,
             "Wet-weather Driving": 88,
@@ -78,7 +78,7 @@ drivers = {
         },
         "Carlos Sainz": {
             "Name": "Carlos Sainz",
-            "Rating:": 88,
+            "Rating": 88,
             "Race-pace": 85,
             "Carefulness": 87,
             "Wet-weather Driving": 92,
@@ -89,7 +89,7 @@ drivers = {
     "McLaren": {
         "Lando Norris": {
             "Name": "Lando Norris",
-            "Rating:": 90,
+            "Rating": 90,
             "Race-pace": 93,
             "Carefulness": 87,
             "Wet-weather Driving": 90,
@@ -97,7 +97,7 @@ drivers = {
         },
         "Oscar Piastri": {
             "Name": "Oscar Piastri",
-            "Rating:": 82,
+            "Rating": 82,
             "Race-pace": 86,
             "Carefulness": 78,
             "Wet-weather Driving": 82,
@@ -108,7 +108,7 @@ drivers = {
     "Aston Martin": {
         "Fernando Alonso": {
             "Name": "Fernando Alonso",
-            "Rating:": 91,
+            "Rating": 91,
             "Race-pace": 89,
             "Carefulness": 92,
             "Wet-weather Driving": 92,
@@ -116,7 +116,7 @@ drivers = {
         },
         "Lance Stroll": {
             "Name": "Lance Stroll",
-            "Rating:": 85,
+            "Rating": 85,
             "Race-pace": 85,
             "Carefulness": 83,
             "Wet-weather Driving": 87,
@@ -126,7 +126,7 @@ drivers = {
     "Alpine": {
         "Esteban Ocon": {
             "Name": "Esteban Ocon",
-            "Rating:": 86,
+            "Rating": 86,
             "Race-pace": 88,
             "Carefulness": 83,
             "Wet-weather Driving": 87,
@@ -134,7 +134,7 @@ drivers = {
         },
         "Pierre Gasly": {
             "Name": "Pierre Gasly",
-            "Rating:": 87,
+            "Rating": 87,
             "Race-pace": 87,
             "Carefulness": 85,
             "Wet-weather Driving": 89,
@@ -144,7 +144,7 @@ drivers = {
     "Alpha Tauri": {
         "Nyck de Vries": {
             "Name": "Nyck de Vries",
-            "Rating:": 80,
+            "Rating": 80,
             "Race-pace": 83,
             "Carefulness": 77,
             "Wet-weather Driving": 80,
@@ -152,7 +152,7 @@ drivers = {
         },
         "Yuki Tsunoda": {
             "Name": "Yuki Tsunoda",
-            "Rating:": 83,
+            "Rating": 83,
             "Race-pace": 85,
             "Carefulness": 80,
             "Wet-weather Driving": 81,
@@ -162,7 +162,7 @@ drivers = {
     "HAAS": {
         "Nico Hulkenberg": {
             "Name": "Nico Hulkenberg",
-            "Rating:": 84,
+            "Rating": 84,
             "Race-pace": 80,
             "Carefulness": 86,
             "Wet-weather Driving": 86,
@@ -170,7 +170,7 @@ drivers = {
         },
         "Kevin Magnussen": {
             "Name": "Kevin Magnussen",
-            "Rating:": 84,
+            "Rating": 84,
             "Race-pace": 86,
             "Carefulness": 82,
             "Wet-weather Driving": 84,
@@ -180,7 +180,7 @@ drivers = {
     "Alfa Romeo": {
         "Valtteri Bottas": {
             "Name": "Valtteri Bottas",
-            "Rating:": 88,
+            "Rating": 88,
             "Race-pace": 87,
             "Carefulness": 89,
             "Wet-weather Driving": 88,
@@ -188,7 +188,7 @@ drivers = {
         },
         "Guanyu Zhou": {
             "Name": "Guanyu Zhou",
-            "Rating:": 80,
+            "Rating": 80,
             "Race-pace": 84,
             "Carefulness": 76,
             "Wet-weather Driving": 80,
@@ -198,7 +198,7 @@ drivers = {
     "Williams": {
         "Alex Albon": {
             "Name": "Alex Albon",
-            "Rating:": 87,
+            "Rating": 87,
             "Race-pace": 88,
             "Carefulness": 85,
             "Wet-weather Driving": 86,
@@ -206,7 +206,7 @@ drivers = {
         },
         "Logan Sargeant": {
             "Name": "Logan Sargeant",
-            "Rating:": 78,
+            "Rating": 78,
             "Race-pace": 80,
             "Carefulness": 75,
             "Wet-weather Driving": 79,
@@ -218,6 +218,16 @@ drivers = {
 }
 driver = ''
 finish_lap_time = 0
+quali_lap_finished = False
+raining = False
+driver_OVR = 0
+int_value_frt_wing = 30
+int_value_rear_wing = 75
+int_value_brake_prs = 50
+int_value_frt_tyre_prs = 22
+int_value_rear_tyre_prs = 20
+set_up_rat = 0
+tip = ''
 
 
 def scale_image(img, factor):
@@ -316,7 +326,6 @@ class SettingsWindow(QMainWindow):
         elif value == 9:
             value = 'Williams'
         self.fav_team_set_lbl.setText(str(value))
-        # self.fav_team_set_lbl = str(value)
         return value
 
     def back_button_pressed(self):
@@ -492,10 +501,61 @@ class SetUpScreen(QMainWindow):
     def __init__(self):
         super(SetUpScreen, self).__init__()
         loadUi("SetUpScreen.ui", self)
+        self.frt_wing_sld = self.findChild(QSlider, "frt_wing_slider")
+        self.frt_wing_lbl = self.findChild(QLabel, "frt_wing_lbl")
+        self.rear_wing_sld = self.findChild(QSlider, "rear_wing_slider")
+        self.rear_wing_lbl = self.findChild(QLabel, "rear_wing_lbl")
+        self.brake_prs_sld = self.findChild(QSlider, "brake_prs_slider")
+        self.brake_prs_lbl = self.findChild(QLabel, "brake_prs_lbl")
+        self.frt_tyre_prs_sld = self.findChild(QSlider, "frt_tyre_prs_slider")
+        self.frt_tyre_prs_lbl = self.findChild(QLabel, "frt_tyre_prs_lbl")
+        self.rear_tyre_prs_sld = self.findChild(QSlider, "rear_tyre_prs_slider")
+        self.rear_tyre_prs_lbl = self.findChild(QLabel, "rear_tyre_prs_lbl")
         self.confirmbutton = self.findChild(QPushButton, "confirm_button")
         self.confirmbutton.clicked.connect(self.entering_race)
         self.lap_menu = LapFinishedMenu()
         self.race_sim = RaceSimulation()
+
+        self.frt_wing_sld.valueChanged.connect(self.frt_wing_sld_change)
+        self.rear_wing_sld.valueChanged.connect(self.rear_wing_sld_change)
+        self.brake_prs_sld.valueChanged.connect(self.brake_prs_sld_change)
+        self.frt_tyre_prs_sld.valueChanged.connect(self.frt_tyre_prs_sld_change)
+        self.rear_tyre_prs_sld.valueChanged.connect(self.rear_tyre_prs_sld_change)
+
+    def frt_wing_sld_change(self, value_frt_wing):
+        global int_value_frt_wing
+        str_value_frt_wing = str(value_frt_wing) + "mm"
+        int_value_frt_wing = int(value_frt_wing)
+        self.frt_wing_lbl.setText(str_value_frt_wing)
+        return int_value_frt_wing
+
+    def rear_wing_sld_change(self, value_rear_wing):
+        global int_value_rear_wing
+        str_value_rear_wing = str(value_rear_wing) + "mm"
+        int_value_rear_wing = int(value_rear_wing)
+        self.rear_wing_lbl.setText(str_value_rear_wing)
+        return int_value_rear_wing
+
+    def brake_prs_sld_change(self, value_brake_prs):
+        global int_value_brake_prs
+        str_value_brake_prs = str(value_brake_prs) + "%"
+        int_value_brake_prs = int(value_brake_prs)
+        self.brake_prs_lbl.setText(str_value_brake_prs)
+        return int_value_brake_prs
+
+    def frt_tyre_prs_sld_change(self, value_frt_tyre_prs):
+        global int_value_frt_tyre_prs
+        str_value_frt_tyre_prs = str(value_frt_tyre_prs) + "PSI"
+        int_value_frt_tyre_prs = int(value_frt_tyre_prs)
+        self.frt_tyre_prs_lbl.setText(str_value_frt_tyre_prs)
+        return int_value_frt_tyre_prs
+
+    def rear_tyre_prs_sld_change(self, value_rear_tyre_prs):
+        global int_value_rear_tyre_prs
+        str_value_rear_tyre_prs = str(value_rear_tyre_prs) + "PSI"
+        int_value_rear_tyre_prs = int(value_rear_tyre_prs)
+        self.rear_tyre_prs_lbl.setText(str_value_rear_tyre_prs)
+        return int_value_rear_tyre_prs
 
     def entering_race(self):
         self.close()
@@ -577,7 +637,7 @@ class SetUpScreen(QMainWindow):
 
             screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
             pygame.display.set_caption("Race")
-            car = Car(6, 6)
+            car = Car(12, 12)
             clock = pygame.time.Clock()
 
             running = True
@@ -649,8 +709,11 @@ class SetUpScreen(QMainWindow):
 
         if __name__ == "__main__":
             main()
+        self.race_sim.IsItRaining()
+        self.race_sim.set_up_lvl()
+        self.race_sim.ovr_driver_stat()
+        self.race_sim.UltimateRacePace()
         self.lap_finished()
-        print(self.race_sim.ovr_driver_stat())
 
     def lap_finished(self):
         self.lap_menu.show()
@@ -660,37 +723,130 @@ class LapFinishedMenu(QMainWindow):
     def __init__(self):
         super(LapFinishedMenu, self).__init__()
         loadUi('LapFinishedMenu.ui', self)
-        self.race_sim = RaceSimulation()
+        self.tip_lbl = self.findChild(QLabel, "tip_label")
 
 
 class RaceSimulation:
 
+    def __init__(self):
+        self.lap_fin_menu = LapFinishedMenu()
+        self.tip_menu = Tip_Selection_Menu()
+        self.frt_wing_rat = 0
+        self.rear_wing_rat = 0
+        self.brake_prs_rat = 0
+        self.frt_tyre_prs_rat = 0
+        self.rear_tyre_prs_rat = 0
+
     def IsItRaining(self):
         global raining
-        raining = False
         rain_chance = random.randint(1, 30)
-        if rain_chance <= 4:
+        if rain_chance <= 29:
             raining = True
             print("It is raining")
         else:
             print("It is not")
 
+    def set_up_lvl(self):
+        if int_value_frt_wing > 34:
+            self.frt_wing_rat = 85
+        elif int_value_frt_wing < 34:
+            self.frt_wing_rat = 90
+        else:
+            self.frt_wing_rat = 100
+
+        if int_value_rear_wing > 76:
+            self.rear_wing_rat = 90
+        elif int_value_rear_wing < 76:
+            self.rear_wing_rat = 85
+        else:
+            self.rear_wing_rat = 100
+
+        if int_value_brake_prs > 87:
+            self.brake_prs_rat = 80
+        elif int_value_brake_prs < 87:
+            self.brake_prs_rat = 85
+        else:
+            self.brake_prs_rat = 100
+
+        if int_value_frt_tyre_prs > 22:
+            self.frt_tyre_prs_rat = 85
+        else:
+            self.frt_tyre_prs_rat = 100
+
+        if int_value_rear_tyre_prs > 22:
+            self.rear_tyre_prs_rat = 90
+        elif int_value_rear_tyre_prs < 22:
+            self.rear_tyre_prs_rat = 85
+        else:
+            self.rear_tyre_prs_rat = 100
+
+        global set_up_rat
+        set_up_rat = self.frt_wing_rat + self.rear_wing_rat + self.brake_prs_rat + self.frt_tyre_prs_rat + self.rear_tyre_prs_rat
+
     def ovr_driver_stat(self):
+
         if driver['Cornering Style'] == 'F':
             driver_style_ovr = 90
         elif driver['Cornering Style'] == 'M':
             driver_style_ovr = 95
         else:
             driver_style_ovr = 85
-        driver_OVR = driver['Carefulness'] + driver['Wet-weather Driving'] + driver_style_ovr
-
+        global driver_OVR
+        driver_OVR = int(driver['Rating']) + int(driver['Race-pace']) + int(driver['Carefulness']) + int(driver['Wet-weather Driving']) + driver_style_ovr
+        print(driver_OVR)
+        print(set_up_rat)
 
     def UltimateRacePace(self):
-        self.IsItRaining()
-        if raining == True:
-            race_pos = 6
-            print(race_pos)
+        global tip
+        if set_up_rat > 490:                # perfect set up is 34,76,87,22,22
+            tip = self.tip_menu.win_from_set_up
+            print(tip)
+            self.lap_fin_menu.tip_lbl.setText(tip)
+        elif raining == False and driver_OVR > 450:
+            print(self.tip_menu.winning())
+            tip = self.tip_menu.winning
+        elif raining == True and driver_OVR > 450 and set_up_rat >= 470:
+            print(self.tip_menu.loss_due_to_rain())
+            tip = self.tip_menu.loss_due_to_rain
+        elif raining == True and driver_OVR > 450 and set_up_rat < 470:
+            print(self.tip_menu.set_up_crash())
+            tip = self.tip_menu.set_up_crash
+        elif raining == True and driver_OVR < 425:
+            print(self.tip_menu.driver_ovr_crash())
+            tip = self.tip_menu.driver_ovr_crash
+        elif raining == False and driver_OVR < 450 and set_up_rat > 470:
+            print(self.tip_menu.podium())
+            tip = self.tip_menu.podium
+        else:
+            print('ass')
 
+
+class Tip_Selection_Menu:
+
+    def win_from_set_up(self):
+        global tip
+        tip = "You should sign yourself up to work in F1, you set-up the car so beautifully, no matter what weather " \
+              "it was and what driver you were, you still won the race! "
+
+    def loss_due_to_rain(self):
+        print("Unlucky buddy, these things happen in the unpredictable world of F1, it rained which means your driver "
+              "span out, he recovered it due to your set up choice but he didn't win like he could have.")
+
+    def winning(self):
+        print("Well done you won! You got lucky however, it wasn't raining and your driver is very skilled, "
+              "as a result of this, he won the race without your help, but next time you should set up the car "
+              "better.")
+
+    def set_up_crash(self):
+        print("Oh no, your driver was skilled enough in the rain but your car was not set-up in the correct way, "
+              "so he crashed out of the race, leading to his rival winning.")
+
+    def driver_ovr_crash(self):
+        print("It was raining, and your driver wasn't skilled enough in the rain to drive, so crashed out, no matter "
+              "how you set up the car")
+    def podium(self):
+        print("Your driver isn't skilled enough to get the win, but the car was set up so well that you managed to "
+              "get your driver a podium.")
 
 
 def window():
