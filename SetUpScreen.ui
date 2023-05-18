@@ -433,6 +433,35 @@
      <string>Confirm</string>
     </property>
    </widget>
+   <widget class="QLabel" name="driver_conf_lbl">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>190</y>
+      <width>211</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hidden</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="driver_conf_but">
+    <property name="geometry">
+     <rect>
+      <x>980</x>
+      <y>300</y>
+      <width>231</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>View Driver Confidence</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

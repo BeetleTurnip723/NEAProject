@@ -26,17 +26,17 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 
-# for cornering, F is for fast cornering, M is for medium cornering, S is for slow cornering
+# for cornering style, F is for fast cornering, M is for medium cornering, S is for slow cornering
 
 drivers = {
     "Mercedes": {
         "Lewis Hamilton": {
-            "Name": "Lewis Hamilton",
-            "Rating": 95,
-            "Race-pace": 96,
-            "Carefulness": 96,
-            "Wet-weather Driving": 92,
-            "Cornering Style": "F"
+            "Name": "Lewis Hamilton",        # this is the name of the driver, which will print above the confirm button
+            "Rating": 95,                    # this is the overall rating of the driver
+            "Race-pace": 96,                 # this is the race-pace of the driver ( how fast they are )
+            "Carefulness": 96,               # this is the carefulness of the driver ( how likely they are to crash )
+            "Wet-weather Driving": 92,       # this is the wet-weather skill ( their skill in the rain )
+            "Cornering Style": "F"           # this is the cornering style, as mentioned above
         },
         "George Russell": {
             "Name": "George Russell",
@@ -221,12 +221,14 @@ finish_lap_time = 0
 quali_lap_finished = False
 raining = False
 driver_OVR = 0
+fav_team = ''
 int_value_frt_wing = 30
 int_value_rear_wing = 75
 int_value_brake_prs = 50
 int_value_frt_tyre_prs = 22
 int_value_rear_tyre_prs = 20
 set_up_rat = 0
+driver_conf = 0
 tip = ''
 
 
@@ -274,13 +276,10 @@ class MyWindow(QMainWindow):
         self.team_select_window.show()
 
     def settings_menu(self, value):
-        self.favourite_team = str(value)
         self.settings_win.show()
-        return self.favourite_team
 
     def exit_menu(self):
-        self.close()
-        print("Exiting...")
+        sys.exit()
 
 
 class SettingsWindow(QMainWindow):
@@ -290,43 +289,39 @@ class SettingsWindow(QMainWindow):
         loadUi("SettingsMenu.ui", self)
         self.slider = self.findChild(QSlider, "horizontalSlider")
         self.fav_team_set_lbl = self.findChild(QLabel, "fav_team_set_lbl")
-        self.label2 = self.findChild(QLabel, "label_2")
         self.backbutton = self.findChild(QPushButton, "back_button")
 
         self.fav_team_set_lbl.setAlignment(QtCore.Qt.AlignCenter)
-        self.label2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.slider.valueChanged.connect(self.slide_it)
         self.backbutton.clicked.connect(self.passing_favourite_team)
 
     def passing_favourite_team(self):
-
         self.close()
 
     def slide_it(self, value):
-
+        global fav_team
         if value == 0:
-            value = 'Red Bull'
+            fav_team = 'Red Bull'
         elif value == 1:
-            value = 'Ferrari'
+            fav_team = 'Ferrari'
         elif value == 2:
-            value = 'Mercedes'
+            fav_team = 'Mercedes'
         elif value == 3:
-            value = 'McLaren'
+            fav_team = 'McLaren'
         elif value == 4:
-            value = 'Alpine'
+            fav_team = 'Alpine'
         elif value == 5:
-            value = 'Alfa Romeo'
+            fav_team = 'Alfa Romeo'
         elif value == 6:
-            value = 'Aston Martin'
+            fav_team = 'Aston Martin'
         elif value == 7:
-            value = 'Alpha Tauri'
+            fav_team = 'Alpha Tauri'
         elif value == 8:
-            value = 'Haas'
+            fav_team = 'Haas'
         elif value == 9:
-            value = 'Williams'
-        self.fav_team_set_lbl.setText(str(value))
-        return value
+            fav_team = 'Williams'
+        self.fav_team_set_lbl.setText(str(fav_team))
 
     def back_button_pressed(self):
         self.close()
@@ -338,7 +333,6 @@ class TeamSelectWindow(QMainWindow):
         super(TeamSelectWindow, self).__init__()
         loadUi("TeamSelectMenu.ui", self)
         self.backButton = self.findChild(QPushButton, "backButton")
-        self.fav_team_lbl = self.findChild(QLabel, "fav_team_lbl")
         self.rb_max_v_confirm = self.findChild(QPushButton, "max_v_cfm_but")
         self.rb_srg_p_confirm = self.findChild(QPushButton, "ser_p_cfm_but")
         self.mer_lew_h_confirm = self.findChild(QPushButton, "lew_h_cfm_but")
@@ -362,9 +356,6 @@ class TeamSelectWindow(QMainWindow):
 
         self.SettingsMenu = SettingsWindow()
         self.SetUpScreen = SetUpScreen()
-
-
-        self.fav_team_lbl.setText(driver)
 
         self.backButton.clicked.connect(self.back_to_main_menu)
 
@@ -512,7 +503,10 @@ class SetUpScreen(QMainWindow):
         self.rear_tyre_prs_sld = self.findChild(QSlider, "rear_tyre_prs_slider")
         self.rear_tyre_prs_lbl = self.findChild(QLabel, "rear_tyre_prs_lbl")
         self.confirmbutton = self.findChild(QPushButton, "confirm_button")
+        self.drv_cfm_but = self.findChild(QPushButton, "driver_conf_but")
+        self.drv_cfm_lbl = self.findChild(QLabel, "driver_conf_lbl")
         self.confirmbutton.clicked.connect(self.entering_race)
+        self.drv_cfm_but.clicked.connect(self.driver_conf)
         self.lap_menu = LapFinishedMenu()
         self.race_sim = RaceSimulation()
 
@@ -556,6 +550,10 @@ class SetUpScreen(QMainWindow):
         int_value_rear_tyre_prs = int(value_rear_tyre_prs)
         self.rear_tyre_prs_lbl.setText(str_value_rear_tyre_prs)
         return int_value_rear_tyre_prs
+
+    def driver_conf(self):
+        self.race_sim.set_up_lvl()
+        self.drv_cfm_lbl.setText(str(driver_conf) + "%")
 
     def entering_race(self):
         self.close()
@@ -637,7 +635,7 @@ class SetUpScreen(QMainWindow):
 
             screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
             pygame.display.set_caption("Race")
-            car = Car(12, 12)
+            car = Car(7, 7)
             clock = pygame.time.Clock()
 
             running = True
@@ -724,6 +722,19 @@ class LapFinishedMenu(QMainWindow):
         super(LapFinishedMenu, self).__init__()
         loadUi('LapFinishedMenu.ui', self)
         self.tip_lbl = self.findChild(QLabel, "tip_label")
+        self.tip_but = self.findChild(QPushButton, "tip_but")
+        self.exit_but = self.findChild(QPushButton, "exit_but")
+
+        self.tip_but.clicked.connect(self.set_tip_lbl)
+        self.exit_but.clicked.connect(self.exit_but_clck)
+
+    def set_tip_lbl(self):
+
+        tip_to_show = str(tip)
+        self.tip_lbl.setText(tip_to_show)
+
+    def exit_but_clck(self):
+        sys.exit()
 
 
 class RaceSimulation:
@@ -740,11 +751,10 @@ class RaceSimulation:
     def IsItRaining(self):
         global raining
         rain_chance = random.randint(1, 30)
-        if rain_chance <= 29:
+        if rain_chance <= 5:
             raining = True
-            print("It is raining")
         else:
-            print("It is not")
+            raining = False
 
     def set_up_lvl(self):
         if int_value_frt_wing > 34:
@@ -781,7 +791,9 @@ class RaceSimulation:
             self.rear_tyre_prs_rat = 100
 
         global set_up_rat
+        global driver_conf
         set_up_rat = self.frt_wing_rat + self.rear_wing_rat + self.brake_prs_rat + self.frt_tyre_prs_rat + self.rear_tyre_prs_rat
+        driver_conf = set_up_rat // 5
 
     def ovr_driver_stat(self):
 
@@ -793,60 +805,61 @@ class RaceSimulation:
             driver_style_ovr = 85
         global driver_OVR
         driver_OVR = int(driver['Rating']) + int(driver['Race-pace']) + int(driver['Carefulness']) + int(driver['Wet-weather Driving']) + driver_style_ovr
-        print(driver_OVR)
-        print(set_up_rat)
 
     def UltimateRacePace(self):
         global tip
         if set_up_rat > 490:                # perfect set up is 34,76,87,22,22
-            tip = self.tip_menu.win_from_set_up
-            print(tip)
-            self.lap_fin_menu.tip_lbl.setText(tip)
+            self.tip_menu.win_from_set_up()
+            self.lap_fin_menu.set_tip_lbl()
         elif raining == False and driver_OVR > 450:
-            print(self.tip_menu.winning())
-            tip = self.tip_menu.winning
+            self.tip_menu.winning()
+            self.lap_fin_menu.set_tip_lbl()
         elif raining == True and driver_OVR > 450 and set_up_rat >= 470:
-            print(self.tip_menu.loss_due_to_rain())
-            tip = self.tip_menu.loss_due_to_rain
+            self.tip_menu.loss_due_to_rain()
+            self.lap_fin_menu.set_tip_lbl()
         elif raining == True and driver_OVR > 450 and set_up_rat < 470:
-            print(self.tip_menu.set_up_crash())
-            tip = self.tip_menu.set_up_crash
-        elif raining == True and driver_OVR < 425:
-            print(self.tip_menu.driver_ovr_crash())
-            tip = self.tip_menu.driver_ovr_crash
+            self.tip_menu.set_up_crash()
+            self.lap_fin_menu.set_tip_lbl()
+        elif raining == True and driver_OVR < 450:
+            self.tip_menu.driver_ovr_crash()
+            self.lap_fin_menu.set_tip_lbl()
         elif raining == False and driver_OVR < 450 and set_up_rat > 470:
-            print(self.tip_menu.podium())
-            tip = self.tip_menu.podium
+            self.tip_menu.podium()
+            self.lap_fin_menu.set_tip_lbl()
         else:
-            print('ass')
+            pass
 
 
 class Tip_Selection_Menu:
-
     def win_from_set_up(self):
         global tip
         tip = "You should sign yourself up to work in F1, you set-up the car so beautifully, no matter what weather " \
               "it was and what driver you were, you still won the race! "
 
     def loss_due_to_rain(self):
-        print("Unlucky buddy, these things happen in the unpredictable world of F1, it rained which means your driver "
-              "span out, he recovered it due to your set up choice but he didn't win like he could have.")
+        global tip
+        tip = "Unlucky buddy, these things happen in the unpredictable world of F1, it rained which means your driver " \
+              "span out, he recovered it due to your set up choice but he didn't win like he could have. "
 
     def winning(self):
-        print("Well done you won! You got lucky however, it wasn't raining and your driver is very skilled, "
-              "as a result of this, he won the race without your help, but next time you should set up the car "
-              "better.")
+        global tip
+        tip = "Well done you won! You got lucky however, it wasn't raining and your driver is very skilled, " \
+              "as a result of this, he won the race without your help, but next time you should set up the car better. "
 
     def set_up_crash(self):
-        print("Oh no, your driver was skilled enough in the rain but your car was not set-up in the correct way, "
-              "so he crashed out of the race, leading to his rival winning.")
+        global tip
+        tip = "Oh no, your driver was skilled enough in the rain but your car was not set-up in the correct way, " \
+              "so he crashed out of the race, leading to his rival winning. "
 
     def driver_ovr_crash(self):
-        print("It was raining, and your driver wasn't skilled enough in the rain to drive, so crashed out, no matter "
-              "how you set up the car")
+        global tip
+        tip = "It was raining, and your driver wasn't skilled enough in the rain to drive, so crashed out, no matter " \
+              "how you set up the car "
+
     def podium(self):
-        print("Your driver isn't skilled enough to get the win, but the car was set up so well that you managed to "
-              "get your driver a podium.")
+        global tip
+        tip = "Your driver isn't skilled enough to get the win, but the car was set up so well that you managed to " \
+              "get your driver a podium. "
 
 
 def window():

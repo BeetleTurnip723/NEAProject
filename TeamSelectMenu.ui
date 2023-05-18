@@ -84,7 +84,7 @@
        <string>Choose Driver</string>
       </property>
      </widget>
-     <widget class="QLabel" name="max_v_desc_but">
+     <widget class="QLabel" name="max_v_desc">
       <property name="geometry">
        <rect>
         <x>320</x>
@@ -103,11 +103,11 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QLabel" name="max_v_desc_but_2">
+     <widget class="QLabel" name="ser_p_desc">
       <property name="geometry">
        <rect>
         <x>870</x>
-        <y>350</y>
+        <y>360</y>
         <width>251</width>
         <height>101</height>
        </rect>
@@ -151,6 +151,60 @@
       </property>
       <property name="text">
        <string>Choose Driver</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>0</y>
+        <width>581</width>
+        <height>341</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mercedes have won nine championships, last winning it in 2021.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lew_h_desc">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>360</y>
+        <width>251</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Lewis Hamilton is a 7 time world champion, last winning it in 2020. His stats are: OVR Rating; 95, Race-pace; 96, Carefulness; 96, Wet-weather driving; 92 and his cornering style is fast.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="geo_r_desc">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>350</y>
+        <width>251</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>George Russell is a 1 time race winner, winning his only GP in Brazil 2022. His stats are: OVR Rating; 89, Race-pace; 93, Carefulness; 84, Wet-weather driving; 90 and his cornering style is medium. </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -414,35 +468,6 @@
     </property>
     <property name="text">
      <string>Back to Main Menu</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>10</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Favourite Team = </string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="fav_team_lbl">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>10</y>
-      <width>111</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

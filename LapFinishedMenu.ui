@@ -14,17 +14,59 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="tip_label">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>270</y>
-      <width>831</width>
+      <x>150</x>
+      <y>60</y>
+      <width>1111</width>
       <height>101</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Hidden</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="tip_but">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>160</y>
+      <width>271</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Click to View Tip</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exit_but">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>340</y>
+      <width>271</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Click to Exit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tip_heading">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>50</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Tip:</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
